@@ -3,12 +3,19 @@
 Created on Sun Apr 10 12:47:02 2016
 
 @author: Administrator
+한국일보 > 뉴스 > 정치 > 정치일반 (페이징 없음)
 """
 
 import requests
 import lxml.html
 from urllib.parse import urljoin ## 상대주소 처리를 위한 모듈
 import csv 
+
+def extract(url, path):
+    res = requests.get(url)
+    res.encoding = 'utf8'
+    root = lxml.html.fromstring(res.text)
+    return root.xpath(path)
 
 base_url = 'http://www.hankookilbo.com'
 board_url = 'http://www.hankookilbo.com/s.aspx?c=11&s=01' ## 게시판 url
@@ -25,8 +32,3 @@ with open('hankook.csv', 'w', encoding = 'utf8') as f:
         # print (post_content.text_content())
         w.writerow([title, full_path, post_content.text_content()])
 
-def extract(url, path):
-    res = requests.get(url)
-    res.encoding = 'utf8'
-    root = lxml.html.fromstring(res.text)
-    return root.xpath(path)

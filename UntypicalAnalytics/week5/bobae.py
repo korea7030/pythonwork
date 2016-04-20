@@ -3,12 +3,21 @@
 Created on Sun Apr 10 00:07:30 2016
 
 @author: Administrator
+
+보배드림 게시판>자동차뉴스 (1~2페이지)
 """
 
 import requests
 import lxml.html
 from urllib.parse import urljoin ## 상대주소 처리를 위한 모듈
 import csv 
+
+def extract(url, path):
+    res = requests.get(url)
+    res.encoding = 'utf8'
+    root = lxml.html.fromstring(res.text)
+    # print(root.xpath(path).text_content())
+    return root.xpath(path)
 
 best_url = 'http://www.bobaedream.co.kr'
 board_url = 'http://www.bobaedream.co.kr/list?code=nnews'
@@ -27,9 +36,3 @@ with open('bobae.csv', 'w', encoding = 'utf8') as f:
             
             w.writerow([title, full_path, post_content.text_content()])            
 
-def extract(url, path):
-    res = requests.get(url)
-    res.encoding = 'utf8'
-    root = lxml.html.fromstring(res.text)
-    # print(root.xpath(path).text_content())
-    return root.xpath(path)
