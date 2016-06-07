@@ -11,6 +11,13 @@ import lxml.html # url 요청에 대한 html 형식 처리
 import csv 
 from konlpy.tag import Twitter
 from sklearn.feature_extraction.text import CountVectorizer
+import numpy as np
+import operator
+from wordcloud import WordCloud
+from matplotlib import pyplot
+# %matplotlib inline
+import networkx
+
 def extract(url, path):
     res = requests.get(url)
     res.encoding = 'cp949'
@@ -43,7 +50,6 @@ with open('chosun.csv', 'w') as f:
                 print (post_content.text_content())                
                 writer.writerow([post_content.text_content()])
             except:
-                err_url.append(page_url)
                 continue
 
 ### 뉴스 읽기
@@ -70,3 +76,62 @@ cv = CountVectorizer(tokenizer=get_word, max_features=50)
 tdf = cv.fit_transform(news)
 words = cv.get_feature_names()
 words
+
+## 단어별 출현빈도
+count_mat = tdf.sum(axis=0) # 열별로 단어별 출현 빈도 합계 구함(axis = 1 , 각 문서별 명사의 사용 개수)
+count_mat
+
+count = numpy.squeeze(numpy.asarray(count_mat)) # 대괄호가 하나로 줄어듬. 좀더 데이터 핸들링을 쉽게 하기 위해 리스트 형태로 해줌
+count
+
+word_count = list(zip(words, count)) # zip : 두개의 각 리스트별 원소의 짝을 지어줌
+
+## 빈도수 정렬
+sorted(word_count, key=operator.itemgetter(1), reverse=True) # word_count를 1번째(빈도수)를 기준으로 내림차순 정렬을 하라
+
+## 워드 클라우드 
+wc = WordCloud(font_path='C:\\Windows\\Fonts\\malgun.ttf', background_color='white', width=400, height=300)
+cloud = wc.generate_from_frequencies(word_count)
+
+pyplot.figure(figsize=(12, 9))
+pyplot.imshow(cloud)
+pyplot.axis("off")
+pyplot.show()
+
+
+## 단어간 상관계수
+word_corr = numpy.corrcoef(tdf.todense(), rowvar=0) # 상관계수 구하기(rowvar =0 : 컬럼단위 상관계수, 1이면 문서간의 상관계수)
+word_corr
+
+## 상관계수 높은 단어 100개 
+edges = []
+for i in range(len(words)): 
+    for j in range(i + 1, len(words)): 
+        edges.append((words[i], words[j], word_corr[i, j])) # 1이 아닌 및부분의 상관계수 추리기
+
+edges = sorted(edges, key=operator.itemgetter(2), reverse=True) # 상관게수가 높은걸로 정렬
+edges = edges[:50]
+edges
+
+edge_list = [(word1, word2) for word1, word2, weight in edges]
+weight_list = [weight for word1, word2, weight in edges]
+
+## 상관관게 시각화
+G = networkx.Graph() # 그래프 생성
+
+edge_set = set()
+for word1, word2, weight in edges:
+    G.add_edge(word1, word2, weight=weight) # 노드간의 연결선을 추가(단어간의 관계)
+    edge_set.add((word1, word2))
+    
+# spring_layout : edge를 스프링처럼 사용하여 단어간의 자성이 있는 것처럼 밀어내거나 당기는 물리학 시뮬레이션으로 위치를 나타냄
+# 서로 연결이 잘 되있을수록 가깝게 연결되어 나옴
+# 항상 랜덤이다
+# iterations 가 커질수록 안정적으로 나온다.
+position = networkx.spring_layout(G, iterations=30) 
+pyplot.figure(figsize=(12, 9)) # 그래프 크기
+networkx.draw_networkx_nodes(G, position, node_size=0) # 노드추가
+networkx.draw_networkx_edges(G, position, edgelist=edge_list, width=weight_list, edge_color='lightgray') # edge 추가
+networkx.draw_networkx_labels(G, position, font_size=15, font_family='Malgun Gothic') # 노드의 단어
+pyplot.axis('off')
+pyplot.show()
