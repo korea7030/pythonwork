@@ -14,21 +14,19 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print (BASE_DIR)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'glru42yzu)iv3z(4#7vsel@75yp!$l$qo$ut&3&=^#u(x*jaxb'
+SECRET_KEY = '=qm359$r=)8rckcn024$k%5czr11s$m$s!0n)v!cb^y-i6!6i7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# DEBUG = True
 
-# CSRF 공격 방지
-# ALLOWED_HOSTS = [u'localhost']
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -39,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'polls',
     'books',
 ]
 
@@ -54,13 +51,12 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'mysite.urls' # url.py 정의
-TEMPLATES_DIRS = [os.path.join(BASE_DIR, 'templates')]
+ROOT_URLCONF = 'mysite.urls'
 
-# template 정의
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -79,10 +75,15 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+#  mysql 연동
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django_db',
+        'USER': 'django',
+        'PASSWORD': 'django',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -111,9 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-# 언어 세팅
-# TIME_ZONE = 'UTC'
-TIME_ZONE = 'Asia/Seoul'
+TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -126,29 +125,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
-
-# logging
-LOGGING = {
-    'version' : 1,
-    'disable_existing_loggers' : False,
-    'formatters': {
-        'verbose' : {
-            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s]%(message)s",
-            'datefmt' : "%d/%b/%Y %H:%M:%S"
-        },
-    },
-    'handlers' : {
-        'file' : {
-            'level' : 'DEBUG',
-            'class' : 'logging.FileHandler',
-            'filename' : os.path.join(BASE_DIR, 'logs/logfile'),
-            'formatter' : 'verbose'
-        },
-    },
-    'loggers' : {
-        'polls' : {
-            'handlers' : ['file'],
-            'level' : 'DEBUG',
-        }
-    }
-}
+# date format 지정
+DATE_INPUT_FORMATS = ('%Y-%m-%d')
