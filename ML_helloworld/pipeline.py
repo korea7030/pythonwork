@@ -2,7 +2,7 @@ from sklearn import datasets
 iris = datasets.load_iris()
 
 # f(x) = y
-X = iris.datasets # features
+X = iris.data # features
 Y = iris.target # labels
 
 # train / test data 나누기
