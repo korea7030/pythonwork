@@ -1,0 +1,63 @@
+<div class="content">
+	<div class="panel panel-primary">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">이력 조회</h3>
+			</div>
+		</div>
+		<div class="panel-body">
+	        <table class="table table-bordered">
+			  <thead>
+			    <tr>
+			       <th style="display:none;">순번</th>
+			       <th>제목</th>
+			       <th>날짜</th>
+			       <th>S시간</th>
+			       <th>F시간</th>
+			       <th>장소</th>
+			       <th>불독이유</th>
+			       <th>S페이지</th>
+			       <th>F페이지</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			    {% for hist in hist_list %}
+			      <tr>
+			        <td style="display:none;" id="book_seq">{{ hist.book__book_sequence }}</td>
+			        <td>{{ hist.book__book_title }} <button type="button" data-id='{{hist.book__book_sequence}}' class="btn btn-default editButton">Edit</button></td>
+			        <td>{{ hist.read_date }}</td>
+			        <td>{{ hist.start_read_time }}</td>
+			        <td>{{ hist.end_read_time }}</td>
+			        <td>{{ hist.read_place }}</td>
+			        <td>{{ hist.not_read_reason }}</td>
+			        <td>{{ hist.start_page_num}}</td>
+			        <td>{{ hist.end_page_num }}</td>
+			      </tr>
+			    {% endfor %}
+			  </tbody>
+			</table>
+			{% if hist_list.has_other_pages %}
+			  <ul class="pagination">
+			    {% if hist_list.has_previous %}
+			      <li><a href="?page={{ books.previous_page_number }}">&laquo;</a></li>
+			    {% else %}
+			      <li class="disabled"><span>&laquo;</span></li>
+			    {% endif %}
+			    {% for i in hist_list.paginator.page_range %}
+			      {% if hist_list.number == i %}
+			        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+			      {% else %}
+			        <li><a href="?page={{ i }}">{{ i }}</a></li>
+			      {% endif %}
+			    {% endfor %}
+			    {% if hist_list.has_next %}
+			      <li><a href="?page={{ books.next_page_number }}">&raquo;</a></li>
+			    {% else %}
+			      <li class="disabled"><span>&raquo;</span></li>
+			    {% endif %}
+			  </ul>
+			{% endif %}
+		</div>
+	</div>
+</div>
+

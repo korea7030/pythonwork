@@ -1,0 +1,242 @@
+{% extends 'book/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<div class="row">
+		<!-- 책 조회 start -->
+		<aside class="col-xs-12 col-sm-6 col-md-6">
+			<div class="content">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">책 검색</h3>
+					</div>
+					<div class="panel-body">
+						<form class="well form-search">
+	                		<input type="text" id="search_input" class="input-medium search-query"/>
+	                		<button type="button" class="btn" id="book_search">Search</button>
+	            		</form>
+	            		<div class="table-responsive">
+		            		<table class="table table-bordered" id="book_table">
+								<thead>
+									<td>표지</td>
+									<td>제목</td>
+									<td>저자</td>
+									<td>분류</td>
+									<td>가격</td>
+								</thead>
+								<tbody id="table-body">
+
+								</tbody>
+							</table>
+							<div class='btns' style='display:none;'><a href='javascript:moreList();' class='btn'>더보기</a></div>
+	            		</div>
+					</div>
+				</div>
+			</div>
+
+		</aside>
+		<!-- 책조회 end -->
+		<aside class="col-xs-12 col-sm-6 col-md-6">
+			<div class="content">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h3 class="panel-title">정보 입력</h3>
+					</div>
+				<div class="panel-body">
+					<!-- <form method="POST" id="book_form" action="/book/"> -->
+						{% csrf_token %}
+						{% crispy form %}
+						<!-- <input type="submit" value="Submit" class="btn btn-success"/> -->
+					<!-- </form> -->
+				</div>
+			</div>
+			</div>
+
+		</aside>
+
+	</div>
+{% endblock %}
+<script type="text/javascript">
+
+	var more_data = new Array();
+
+	$('#book_search').click(function(){
+		var search_input = $('#search_input').val();
+		var input_data = {};
+		if (search_input == '') {
+			alert("검색어를 입력하세요");
+			return ;
+		} else {
+			input_data['q'] = search_input;
+		}
+
+		$.ajax({
+			url : '/book/search/',
+			type : 'get',
+			dataType: 'xml',
+			data : input_data,
+            // contentType: 'application/json;',
+			success:function(data) {
+				// var test = rplLine(data);
+				// var obj = JSON.parse(test);
+				// alert(data);
+
+				// alert($(data).find("channel").find("item")[0]);
+				// full_data = $(data).find("channel").find("item");
+				// console.log(typeof full_data);
+				var row_html = "";
+
+				$("#book_table tbody").html("");
+				if ($(data).find("channel").find("item").length>0) {
+					$(data).find("channel").find("item").each(function(idx) {
+						// alert($(this).find("title").text());
+						// alert(idx);
+						var book_info = $(this);
+						var book_obj = new Object();
+						book_obj = tojson(book_info);
+						var img_url = book_info.find("cover_s_url").text();
+						var title = book_info.find("title").text();
+						var author = book_info.find("author").text();
+						var category = book_info.find("category").text();
+						var ebook_barcode = book_info.find("ebook_barcode").text();
+						var sale_price = book_info.find("sale_price").text();
+
+						if (idx <= 3) {
+							if (ebook_barcode != '') {
+								row_html += "<tr class='rowid'><td><img src='"+img_url+"'></img></td><td>"+title+"(eBook)</td><td>"+author+"</td><td>"+category+"</td><input type='hidden' value='"+JSON.stringify(book_obj)+"'></input></td><td>"+sale_price.substr(0,2)+","+sale_price.substr(2)+"</td></tr>";
+							}else {
+								row_html += "<tr class='rowid'><td><img src='"+img_url+"'></img></td><td>"+title+"</td><td>"+author+"</td><td>"+category+"</td><input type='hidden' value='"+JSON.stringify(book_obj)+"'></input></td><td>"+sale_price.substr(0,2)+","+sale_price.substr(2)+"</td></tr>";
+							}
+						} else {
+							// var img_url = book_info.find("cover_s_url").text();
+							// var title = book_info.find("title").text();
+							// var author = book_info.find("author").text();
+							// var category = book_info.find("category").text();
+							// var ebook_barcode = book_info.find("ebook_barcode").text();
+							// var sale_price = book_info.find("sale_price").text();
+							var tmp = new Object();
+							tmp["cover_s_url"] = book_info.find("cover_s_url").text();
+							tmp["title"] = book_info.find("title").text();
+							tmp["author"] = book_info.find("author").text();
+							tmp["category"] = book_info.find("category").text();
+							tmp["ebook_barcode"] = book_info.find("ebook_barcode").text();
+							tmp["sale_price"] = book_info.find("sale_price").text();
+							tmp["book_obj"] = JSON.stringify(book_obj);
+
+							more_data.push(tmp);
+						}
+					});
+
+					if ($(data).find("channel").find("item").length > 3) {
+						$('div.btns').css('display', 'block');
+					}
+					// console.log(more_data);
+					jQuery("#book_table tbody").append(row_html);
+				}
+			}
+
+		});
+	});
+	// 동적으로 추가된 element 에 대해선 on 으로 click event 를 binding해야 한다.
+	$(document).on("click", "#book_table tr", function(e) {
+		/*
+    	id_book_title
+    	id_book_format(ebook_barcode 여부에 따라 비교)
+    	id_category_nm
+    	id_publisher
+    	publisher_date
+    	*/
+		var row_book_info = $(this).find("input").val();
+		// string object를 json 형태로 변경
+		var json_book = JSON.parse(row_book_info);
+
+		$("#id_book_title").val(json_book["title"]);
+
+		if (json_book['ebook_barcode'] != null) {
+			$("#id_book_format").val("eBook");
+		} else {
+			$("#id_book_format").val("Book");
+		}
+
+		$("#id_category_nm").val(json_book["category"]);
+		$("#id_publisher").val(json_book["pub_nm"]);
+		$("#id_author").val(json_book["author"]);
+		var date = dateformat(json_book["pub_date"]);
+		$("#id_publisher_date").val(date);
+		$("#id_poster_url").val(json_book["cover_s_url"]);
+    	// $('#book_table tbody').removeAttribute("style");
+        // $(this).css('background-color', 'Green');
+	});
+
+	function moreList() {
+		// console.log(more_data.length);
+		var len = more_data.length;
+		var list_data = more_data;
+
+		var row_html = "";
+
+		if (len > 0) {
+			if (len > 4) {
+				for (var i = 0; i < 4; i++) {
+				// console.log("i :"+i);
+					if (list_data[i]["ebook_barcode"] != '') {
+						row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"(eBook)</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+					} else {
+						row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+					}
+					more_data = new Array();
+				}
+			}else {
+				for (var i = 0; i < len; i++) {
+				// console.log("i :"+i);
+					if (list_data[i]["ebook_barcode"] != '') {
+						row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"(eBook)</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+					} else {
+						row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+					}
+
+				}
+			}
+
+
+
+			if (len > 4) {
+				for (var j = 4; j < len; j++) {
+					more_data.push(list_data[i]);
+				}
+				$('div.btns').css('display', 'block');
+			} else {
+				$('div.btns').css('display', 'none');
+			}
+
+		} else {
+			$('div.btns').css('display', 'none');
+		}
+
+		jQuery("#book_table tbody").append(row_html);
+	}
+	// yyyymmdd -> yyyy-mm-dd 변환
+	function dateformat(str_date) {
+		var year = str_date.substr(0,4);
+		var month = str_date.substr(4,2);
+		var day = str_date.substr(6,2);
+
+		return year+"-"+month+"-"+day;
+	}
+
+	// xml을 json object형태로 변환
+	function tojson(xml) {
+		var obj = new Object();
+		// console.log(xml.find("title").text());
+		obj['title'] = xml.find("title").text();
+		obj['cover_s_url'] = xml.find("cover_s_url").text();
+		obj['author'] = xml.find("author").text();
+		obj['pub_nm'] = xml.find("pub_nm").text();
+		obj['pub_date'] = xml.find("pub_date").text();
+		obj['category'] = xml.find("category").text();
+		obj['ebook_barcode'] = xml.find("ebook_barcode").text();
+		obj['barcode'] = xml.find("barcode").text();
+		obj['sale_price'] = xml.find("sale_price").text();
+		// console.log(obj);
+		return obj;
+	}
+</script>
