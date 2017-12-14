@@ -1,0 +1,499 @@
+{% extends 'bookapp/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+		{{ request.session.user_id }}
+		{{ form.non_field_errors }}
+		<div class="container">
+
+			<form class="well form-horizontal" id="info_form" method="post">
+				{% csrf_token %}
+				<fieldset>
+					<!-- Form Name  -->
+					<legend><center><h2><b>책 저장</b></h2></center></legend>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">순번(B1,B2.. 형식)</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="book_sequence" name="book_sequence" placeholder="책순번" required oninvalid="this.setCustomValidity('순번은 필수항목입니다.')">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">책 제목</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="book_title" name="book_title" placeholder="제목" required oninvalid="this.setCustomValidity('책제목은 필수항목입니다.')">
+								<!-- {{ form.book_title }} -->
+								<!-- <button type="button" data-toggle="modal" data-target="#layerpop">Launch modal</button> -->
+								<input type="button" class="btn btn-default" data-toggle="modal" data-target="#layerpop" value="검색">
+								<!-- 책 조회 start -->
+								<div class="modal fade" id="layerpop" role="dialog">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<!-- 닫기버튼 -->
+												<button type="button" class="close" data-dismiss="modal" >x</button>
+												<!-- 제목 -->
+												<h4 class="modal-title">책 검색</h4>
+											</div>
+											<div class="modal-body">
+												<div class="panel panel-primary">
+													<div class="panel-body">
+														<form class="well form-search">
+																			<input type="text" id="search_input" class="input-medium search-query"/>
+																			<button type="button" class="btn" id="book_search">Search</button>
+																	</form>
+																	<div class="table-responsive">
+																		<table class="table table-bordered" id="book_table">
+																<thead>
+																	<td>표지</td>
+																	<td>제목</td>
+																	<td>저자</td>
+																	<td>분류</td>
+																	<td>가격</td>
+																</thead>
+																<tbody id="table-body">
+
+																</tbody>
+															</table>
+															<div id="more_btn" class='btns' style='display:none;'><a href='javascript:moreList();' class='btn'>더보기</a></div></div>
+													</div>
+												</div>
+											</div>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">부 제목</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="book_subtitle" name="book_subtitle" placeholder="부제목">
+								<!-- {{ form.book_subtitle }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">저자</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="author" name="author" placeholder="저자" required oninvalid="this.setCustomValidity('저자는 필수항목입니다.')">
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">번역</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="translator" name="translator" placeholder="번역">
+
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">출판사</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="publisher" name="publisher" placeholder="출판사">
+								<!-- {{ form.publisher }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">출판일자</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="datepicker" id="publisher_date" name="publisher_date" placeholder="출판일자">
+								<!-- {{ form.publisher_date }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">카테고리명</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="category_nm" name="category_nm" placeholder="카테고리명">
+								<!-- {{ form.publisher }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">책형태</label>
+						<div class="col-md-4 selectContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<select class="form-control selectpicker" id="book_format" name="book_format" required oninvalid="this.setCustomValidity('책형태는 필수항목입니다.')">
+									<option value="" selected="selected">------</option>
+									<option value="Book">Book</option>
+									<option value="eBook">eBook</option>
+								</select>
+										<!-- {{ form.book_format }} -->
+
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">페이지수</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="number" class="form-control" id="pages" name="pages" placeholder="페이지수" required oninvalid="this.setCustomValidity('페이지수는 필수항목입니다.')">
+								<!-- {{ form.pages }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">별점</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="number" class="form-control" id="rating" name="rating" placeholder="별점" required oninvalid="this.setCustomValidity('별점은 필수항목입니다.')">
+								<!-- {{ form.rating }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">독서상태</label>
+						<div class="col-md-4 selectContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<!-- {{ form.read_status }} -->
+								<select class="form-control selectpicker" id="read_status" name="read_status" required oninvalid="this.setCustomValidity('독서상태는 필수항목입니다.')">
+									<option value="" selected="selected">-----</option>
+									<option value="Read">Read</option>
+									<option value="Reading">Reading</option>
+								</select>
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">빌린여부(Y/N)</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text" class="form-control" id="borrowed_yn" name="borrowed_yn" placeholder='빌린여부(Y/N)' required oninvalid="this.setCustomValidity('빌린여부는 필수항목입니다.')">
+								<!-- {{ form.borrowed_yn }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">소감내용</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<!-- <input class="form-control" type="file" id="docfile" name="docfile" > -->
+								<textarea class="form-control" id="book_essay" name="book_essay" maxlength="4000"></textarea>
+								<!-- {{ form.docfile }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">시작일자</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text" class="datepicker" id="start_date" name="start_date" placeholder='시작일자' required oninvalid="this.setCustomValidity('시작일자는 필수항목입니다.')">
+
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">마감일자</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text" class="datepicker" id="end_date" name="end_date" placeholder='마감일자' required oninvalid="this.setCustomValidity('마감일자는 필수항목입니다.')">
+
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+				  <label class="col-md-4 control-label"></label>
+					  <div class="col-md-4"><br>
+					    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" class="btn btn-warning" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSUBMIT <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+					  </div>
+				</div>
+				<input type="hidden" id="poster_url" name="poster_url" value="">
+				<input type="hidden" id="category" name="category" value="">
+				<input type="hidden" id="cate_cd" name="cate_cd" value="">
+				</fieldset>
+
+			</form>
+		</div>
+
+<script type="text/javascript">
+	var more_data = new Array();
+
+$(document).ready(function() {
+	$('.datepicker').datepicker({
+			autoclose: true,
+			todayHilight : true,
+			dateFormat : 'yy-mm-dd'
+	});
+	// $('#info_form').formValidation();
+});
+$('#book_search').click(function(){
+		var search_input = $('#search_input').val();
+		var input_data = {};
+		if (search_input == '') {
+			alert("검색어를 입력하세요");
+			return ;
+		} else {
+			input_data['q'] = search_input;
+		}
+
+		$.ajax({
+			url : '/bookapp/search/',
+			type : 'get',
+			dataType: 'xml',
+			data : input_data,
+            // contentType: 'application/json;',
+			success:function(data) {
+
+				var row_html = "";
+				// $("#book_table tbody").css("display", "block");
+				if ($(data).find("channel").find("item").length>0) {
+					$(data).find("channel").find("item").each(function(idx) {
+						// alert($(this).find("title").text());
+						// alert(idx);
+
+						var book_info = $(this);
+						var book_obj = new Object();
+						book_obj = tojson(book_info);
+						var img_url = book_info.find("cover_s_url").text();
+						var title = book_info.find("title").text();
+						var author = book_info.find("author").text();
+						var category = book_info.find("category").text();
+						var ebook_barcode = book_info.find("ebook_barcode").text();
+						var sale_price = book_info.find("sale_price").text();
+
+						if (idx <= 3) {
+							if (ebook_barcode != '') {
+								row_html += "<tr class='rowid'><td><img src='"+img_url+"'></img></td><td>"+title+"(eBook)</td><td>"+author+"</td><td>"+category+"</td><input type='hidden' value='"+JSON.stringify(book_obj)+"'></input></td><td>"+sale_price.substr(0,2)+","+sale_price.substr(2)+"</td></tr>";
+							}else {
+								row_html += "<tr class='rowid'><td><img src='"+img_url+"'></img></td><td>"+title+"</td><td>"+author+"</td><td>"+category+"</td><input type='hidden' value='"+JSON.stringify(book_obj)+"'></input></td><td>"+sale_price.substr(0,2)+","+sale_price.substr(2)+"</td></tr>";
+							}
+							console.log(row_html);
+						} else {
+
+							var tmp = new Object();
+							tmp["cover_s_url"] = book_info.find("cover_s_url").text();
+							tmp["title"] = book_info.find("title").text();
+							tmp["author"] = book_info.find("author").text();
+							tmp["category"] = book_info.find("category").text();
+							tmp["ebook_barcode"] = book_info.find("ebook_barcode").text();
+							tmp["sale_price"] = book_info.find("sale_price").text();
+							tmp["book_obj"] = JSON.stringify(book_obj);
+
+							more_data.push(tmp);
+							console.log(more_data);
+						}
+					});
+
+					if ($(data).find("channel").find("item").length > 3) {
+						$('div.btns').css('display', 'block');
+					}
+					// console.log(more_data);
+					jQuery("#book_table tbody").append(row_html);
+					// $("#book_table tbody").css("display" , "table");
+				}
+			}
+
+		});
+	});
+
+	$('#info_form').on('submit', function(event) {
+		event.preventDefault();
+		$('#category').val($('#category_nm').val())
+		// console.log("AAA");
+		create_info();
+	})
+
+// form submit
+	function create_info() {
+		console.log("function call")
+		var formData = $('#info_form').serialize();
+		// alert($('#category_nm').val());
+		$.ajax({
+			url : '/bookapp/',
+			type: 'POST',
+			data : formData,
+			success : function(json) {
+				$('#info_form').each(function() {
+					cleanForm(this);
+				});
+				alert(json.result);
+			},
+
+			error : function(xhr, errmsg, err) {
+				console.log(xhr.status + " : " + xhr.responseText);
+			}
+		});
+	}
+
+	function cleanForm(form) {
+	  // iterate over all of the inputs for the form
+	  // element that was passed in
+	  $(':input', form).each(function() {
+	    var type = this.type;
+	    var tag = this.tagName.toLowerCase(); // normalize case
+	    // it's ok to reset the value attr of text inputs,
+	    // password inputs, and textareas
+	    if (type == 'text' || type == 'password' || tag == 'textarea')
+	      this.value = "";
+	    // checkboxes and radios need to have their checked state cleared
+	    // but should *not* have their 'value' changed
+	    else if (type == 'checkbox' || type == 'radio')
+	      this.checked = false;
+	    // select elements need to have their 'selectedIndex' property set to -1
+	    // (this works for both single and multiple select elements)
+	    else if (tag == 'select')
+	      this.selectedIndex = -1;
+	  });
+	}
+
+	$('#layerpop').on("click", "#book_table tr", function(e) {
+
+			var row_book_info = $(this).find("input").val();
+			// string object를 json 형태로 변경
+			var json_book = JSON.parse(row_book_info);
+			console.log(json_book);
+			$("#book_title").val(json_book["title"]);
+
+			if (json_book['ebook_barcode'] != null) {
+				$("#book_format").val("eBook");
+			} else {
+				$("#book_format").val("Book");
+			}
+
+			$("#category_nm").val(json_book["category"]);
+			// $('#cate_cd').val(json_book["cate_id"]);
+			$("#publisher").val(json_book["pub_nm"]);
+			$("#author").val(json_book["author"]);
+			var date = dateformat(json_book["pub_date"]);
+			$("#publisher_date").val(date);
+			$("#poster_url").val(json_book["cover_s_url"]);
+
+			$("#search_input").val("");
+			$("#book_table tbody").empty();
+			$("#book_table tbody").css("display" , "none");
+			$("#more_btn").css("display", "none");
+			$("#layerpop").modal('hide');
+			more_data = [];
+	    	// $('#book_table tbody').removeAttribute("style");
+	        // $(this).css('background-color', 'Green');
+		});
+
+		function moreList() {
+			// console.log(more_data.length);
+			var len = more_data.length;
+			var list_data = more_data;
+
+			var row_html = "";
+
+			if (len > 0) {
+				if (len > 4) {
+					for (var i = 0; i < 4; i++) {
+					// console.log("i :"+i);
+						if (list_data[i]["ebook_barcode"] != '') {
+							row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"(eBook)</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+						} else {
+							row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+						}
+						more_data = new Array();
+					}
+				}else {
+					for (var i = 0; i < len; i++) {
+					// console.log("i :"+i);
+						if (list_data[i]["ebook_barcode"] != '') {
+							row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"(eBook)</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+						} else {
+							row_html += "<tr class='rowid'><td><img src='"+list_data[i]["cover_s_url"]+"'></img></td><td>"+list_data[i]["title"]+"</td><td>"+list_data[i]["author"]+"</td><td>"+list_data[i]["category"]+"</td><input type='hidden' value='"+list_data[i]["book_obj"]+"'></input></td><td>"+list_data[i]["sale_price"].substr(0,2)+","+list_data[i]["sale_price"].substr(2)+"</td></tr>";
+						}
+
+					}
+				}
+
+				if (len > 4) {
+					for (var j = 4; j < len; j++) {
+						more_data.push(list_data[i]);
+					}
+					$('div.btns').css('display', 'block');
+				} else {
+					$('div.btns').css('display', 'none');
+				}
+
+			} else {
+				$('div.btns').css('display', 'none');
+			}
+
+			jQuery("#book_table tbody").append(row_html);
+		}
+	// yyyymmdd -> yyyy-mm-dd 변환
+	function dateformat(str_date) {
+		var year = str_date.substr(0,4);
+		var month = str_date.substr(4,2);
+		var day = str_date.substr(6,2);
+
+		return year+"-"+month+"-"+day;
+	}
+
+	// xml을 json object형태로 변환
+	function tojson(xml) {
+		var obj = new Object();
+		// console.log(xml.find("title").text());
+		obj['title'] = xml.find("title").text();
+		obj['cover_s_url'] = xml.find("cover_s_url").text();
+		obj['author'] = xml.find("author").text();
+		obj['pub_nm'] = xml.find("pub_nm").text();
+		obj['pub_date'] = xml.find("pub_date").text();
+		obj['category'] = xml.find("category").text();
+		obj['ebook_barcode'] = xml.find("ebook_barcode").text();
+		obj['barcode'] = xml.find("barcode").text();
+		obj['sale_price'] = xml.find("sale_price").text();
+		// console.log(obj);
+		return obj;
+	}
+</script>
+
+{% endblock %}

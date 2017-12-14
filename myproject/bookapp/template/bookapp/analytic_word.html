@@ -1,0 +1,177 @@
+{% extends 'bookapp/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+		{{ request.session.user_id }}
+		<div class="container">
+					<div class="form-group">
+						<label class="col-xs-3 control-label">분류선택</label>
+						<div class="col-xs-9 inputGroupContainer">
+							<div class="input-group">
+								<!-- <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span> -->
+
+								<select class="form-control" name="book_category" id="book_category">
+                  {% for category in categories %}
+                    <option value="{{ category.cate_cd__cate_2 }}">{{ category.cate_cd__cate_2 }}</option>
+                  {% endfor %}
+								</select>
+						</div>
+					</div>
+					<br><br>
+					<hr width='100%'>
+					<div class="row">
+				    <div class="col-xs-6">
+				      <div id="word_cloud"></div>
+				    </div>
+						<div class="col-xs-6">
+							<div id="network_graph"></div>
+						</div>
+				  </div>
+		</div>
+
+<script type="text/javascript">
+// myArray = [{"text":"First","size":15},{"text":"Not","size":29},{"text":"Bird","size":80},{"text":"Hello","size":40},{"text":"Word","size":76},{"text":"Marketplaces","size":75}]
+
+$(document).ready(function() {
+
+	var fillColor = d3.scale.category20b();
+	var margin = {top:20, right:20, bottom:20, left:40},
+			width = 600 - margin.left - margin.right,
+			height = 600 - margin.top - margin.bottom;
+
+	var cloud_data = {{cloud_data|safe}};
+	var node_data= {{nodes|safe}};
+	var link_data= {{links|safe}};
+
+	if (cloud_data != '' && node_data != '' && link_data != '') {
+		setCloud(cloud_data);
+		setforce(node_data, link_data);
+	}
+
+	function setforce(node_data, link_data) {
+		nodeScale = d3.scale.linear().domain([-10, 10]).range([0, 20]).clamp(true);
+		edgeScale = d3.scale.linear().domain([-1.5, 0]).range([3.5, 0.9]).clamp(true);
+
+		var color = d3.scale.category20();
+		// alert(node_data[0]['value']);
+		var force = d3.layout.force().charge(-120).size([width, height]);
+
+		var svg = d3.select("#network_graph").append("svg").attr("width", width).attr("height", height);
+		force.nodes(node_data).links(link_data).linkDistance(function(link) { return edgeScale(link.value-1)*100; }).start();
+
+		var link = svg.selectAll(".link").data(link_data).enter().append("line").attr("class", "link").style("stroke-width", function(d) {
+			return d.value;
+		}).style("stroke", "#ccc");
+
+		var node = svg.selectAll(".node").data(node_data).enter().append("g").attr("class", "node").call(force.drag);
+		node.append("circle")
+	    .attr("r", function(d) {
+				return nodeScale(d.value);
+			})
+	    .style("fill", function (d) {
+	    return color(d.id);
+		})
+
+		node.append("text").attr("dx", 10)
+	      .attr("dy", ".35em")
+	      .text(function(d) { return d.id });
+
+		force.on("tick", function () {
+	    link.attr("x1", function (d) {
+	        return d.source.x;
+	    })
+	        .attr("y1", function (d) {
+	        return d.source.y;
+	    })
+	        .attr("x2", function (d) {
+	        return d.target.x;
+	    })
+	        .attr("y2", function (d) {
+	        return d.target.y;
+	    });
+
+	    //Changed
+
+	    d3.selectAll("circle").attr("cx", function (d) {
+	        return d.x;
+	    })
+	        .attr("cy", function (d) {
+	        return d.y;
+	    });
+
+	    d3.selectAll("text").attr("x", function (d) {
+	        return d.x;
+	    })
+	        .attr("y", function (d) {
+	        return d.y;
+	    });
+
+	    //End Changed
+		});
+	}
+
+
+	$('#book_category').change(function() {
+		// alert($(this).val());
+		$.ajax({
+				url: '/bookapp/ajax_analytic_word/',
+				// type : 'get',
+				method: 'GET',
+				dataType: 'json',
+				data : {
+					'cate_2' : $(this).val()
+				},
+
+				success : function(data) {
+					// alert(data.cloud_data[0]['text']);
+					// alert(data.nodes[0]['id']);
+					d3.select("#word_cloud").selectAll("svg").remove();
+					d3.select("#network_graph").selectAll("svg").remove();
+					setCloud(data.cloud_data);
+					setforce(data.nodes, data.links);
+					// $('#chart').html(data.result);
+				}
+		});
+	});
+
+	function setCloud(data) {
+		//scale.linear: 선형적인 스케일로 표준화를 시킨다.
+		//domain: 데이터의 범위, 입력 크기
+		//range: 표시할 범위, 출력 크기
+		//clamp: domain의 범위를 넘어간 값에 대하여 domain의 최대값으로 고정시킨다.
+		wordScale = d3.scale.linear().domain([0, 100]).range([0, 300]).clamp(true);
+		d3.layout.cloud().size([width, height])
+				.words(data) // from list.js
+				.padding(5)
+				.rotate(0)
+				.font("Impact")
+				.fontSize(function(d) { return wordScale(d.size); })
+				.on("end", drawCloud)
+				.start();
+
+	}
+
+	function drawCloud(words) {
+		d3.select("#word_cloud").append("svg").attr("border",1)
+				.attr("width", width + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+			.append("g")
+			.attr("transform", "translate(" + (width + margin.left + margin.right)/2 + "," + (height + margin.top + margin.bottom)/2 + ")")
+			.selectAll("text")
+				.data(words)
+				.enter().append("text")
+				.style("font-size", function(d) { return wordScale(d.size) + "px"; })
+				.style("font-family", "Impact")
+				.style("fill", function(d, i) { return fillColor(i); })
+				.attr("text-anchor", "middle")
+				.attr("transform", function(d,i) {
+							return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+						}
+				)
+			.text(function(d) { return d.text; });
+	}
+});
+
+
+</script>
+
+{% endblock %}

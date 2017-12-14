@@ -1,0 +1,56 @@
+{% extends 'bookapp/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+		{{ form.non_field_errors }}
+		<div class="container">
+
+			<form class="well form-horizontal" id="signup_form" method="post" action="{% url 'bookapp:join' %}">
+				{% csrf_token %}
+				<fieldset>
+					<!-- Form Name  -->
+					<legend><center><h2><b>회원가입</b></h2></center></legend>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">사용자명</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="username" name="username" placeholder="사용자명" required oninvalid="this.setCustomValidity('사용자명은 필수항목입니다.')">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">이메일</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="email" name="email" placeholder="이메일" required oninvalid="this.setCustomValidity('이메일은 필수항목입니다.')">
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-md-4 control-label">비밀번호</label>
+						<div class="col-md-4 inputGroupContainer">
+							<div class="input-group">
+								<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+								<input type="text"  class="form-control" id="password" name="password" placeholder="비밀번호"  required oninvalid="this.setCustomValidity('비밀번호는 필수항목입니다.')">
+								<!-- {{ form.book_subtitle }} -->
+								<!-- <input type="text" name="book_sequence" value="" placeholder = "책 순번" class="form-control"> -->
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group">
+				  <label class="col-md-4 control-label"></label>
+					  <div class="col-md-4"><br>
+					    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<button type="submit" class="btn btn-warning" >&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp회원가입 <span class="glyphicon glyphicon-send"></span>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp</button>
+					  </div>
+				  </div>
+				</fieldset>
+
+			</form>
+		</div>
+{% endblock %}

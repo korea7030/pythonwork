@@ -2,9 +2,12 @@
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+#
+# Also note: You'll have to insert the output of 'django-admin sqlcustom [app_label]'
+# into your database.
+
 from __future__ import unicode_literals
 
 from django.db import models
@@ -19,8 +22,8 @@ class AuthGroup(models.Model):
 
 
 class AuthGroupPermissions(models.Model):
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
+    group = models.ForeignKey(AuthGroup)
+    permission = models.ForeignKey('AuthPermission')
 
     class Meta:
         managed = False
@@ -30,7 +33,7 @@ class AuthGroupPermissions(models.Model):
 
 class AuthPermission(models.Model):
     name = models.CharField(max_length=255)
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
+    content_type = models.ForeignKey('DjangoContentType')
     codename = models.CharField(max_length=100)
 
     class Meta:
@@ -43,7 +46,7 @@ class AuthUser(models.Model):
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(blank=True, null=True)
     is_superuser = models.BooleanField()
-    username = models.CharField(unique=True, max_length=150)
+    username = models.CharField(unique=True, max_length=30)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     email = models.CharField(max_length=254)
@@ -57,8 +60,8 @@ class AuthUser(models.Model):
 
 
 class AuthUserGroups(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
+    user = models.ForeignKey(AuthUser)
+    group = models.ForeignKey(AuthGroup)
 
     class Meta:
         managed = False
@@ -67,8 +70,8 @@ class AuthUserGroups(models.Model):
 
 
 class AuthUserUserPermissions(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
+    user = models.ForeignKey(AuthUser)
+    permission = models.ForeignKey(AuthPermission)
 
     class Meta:
         managed = False
@@ -77,9 +80,9 @@ class AuthUserUserPermissions(models.Model):
 
 
 class BookCategory(models.Model):
-    category_id = models.CharField(primary_key=True, max_length=10)
-    category_div1 = models.CharField(max_length=50)
-    category_div2 = models.CharField(max_length=50)
+    cate_id = models.CharField(primary_key=True, max_length=10)
+    cate_1 = models.CharField(max_length=50, blank=True, null=True)
+    cate_2 = models.CharField(max_length=50, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -88,63 +91,53 @@ class BookCategory(models.Model):
 
 class BookInfo(models.Model):
     book_sequence = models.CharField(primary_key=True, max_length=10)
-    book_title = models.CharField(max_length=200)
+    book_title = models.CharField(max_length=200, blank=True, null=True)
     book_subtitle = models.CharField(max_length=300, blank=True, null=True)
     author = models.CharField(max_length=100, blank=True, null=True)
     translator = models.CharField(max_length=100, blank=True, null=True)
     publisher = models.CharField(max_length=100, blank=True, null=True)
     publisher_date = models.DateField(blank=True, null=True)
-    book_format = models.CharField(max_length=20)
-    pages = models.IntegerField()
-    rating = models.IntegerField()
-    category_nm = models.CharField(max_length=100)
-    start_date = models.DateField()
-    end_date = models.DateField()
-    reg_date = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    book_format = models.CharField(max_length=20, blank=True, null=True)
+    pages = models.IntegerField(blank=True, null=True)
+    rating = models.IntegerField(blank=True, null=True)
+    cate_cd = models.ForeignKey(BookCategory, db_column='cate_cd', blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     book_essay_url = models.CharField(max_length=1000, blank=True, null=True)
     poster_url = models.CharField(max_length=1000, blank=True, null=True)
-    read_status = models.CharField(max_length=20, blank=True, null=True)
-    borrowed_yn = models.CharField(max_length=10, blank=True, null=True)
-    docfile = models.BinaryField(blank=True, null=True)
+    read_status = models.CharField(max_length=10, blank=True, null=True)
+    borrowed_yn = models.CharField(max_length=2, blank=True, null=True)
+    book_essay = models.CharField(max_length=4000, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'book_info'
 
-
-class BookReadHist(models.Model):
-    ''' 저장용 model '''
-    book_sequence = models.CharField(max_length=10)
-    # book = models.ForeignKey(BookInfo, null=True, db_column='book_sequence')
-    start_read_time = models.TimeField(blank=True, null=True)
-    end_read_time = models.TimeField(blank=True, null=True)
-    read_place = models.CharField(max_length=30, blank=True, null=True)
-    not_read_reason = models.CharField(max_length=100, blank=True, null=True)
-    start_page_num = models.IntegerField(blank=True, null=True)
-    end_page_num = models.IntegerField(blank=True, null=True)
-    read_date = models.DateField()
-    tab_seq = models.AutoField(primary_key=True)
-
-    class Meta:
-        managed = False
-        db_table = 'book_read_hist'
-
-class ReadHistList(models.Model):
-    ''' 조회용 model '''
-    # book_sequence = models.CharField(max_length=10)
-    book = models.ForeignKey(BookInfo, null=True, db_column='book_sequence')
-    start_read_time = models.TimeField(blank=True, null=True)
-    end_read_time = models.TimeField(blank=True, null=True)
-    read_place = models.CharField(max_length=30, blank=True, null=True)
-    not_read_reason = models.CharField(max_length=100, blank=True, null=True)
-    start_page_num = models.IntegerField(blank=True, null=True)
-    end_page_num = models.IntegerField(blank=True, null=True)
-    read_date = models.DateField()
-    tab_seq = models.AutoField(primary_key=True)
+class BookSaveInfo(models.Model):
+    book_sequence = models.CharField(primary_key=True, max_length=10)
+    book_title = models.CharField(max_length=200, blank=True, null=True)
+    book_subtitle = models.CharField(max_length=300, blank=True, null=True)
+    author = models.CharField(max_length=100, blank=True, null=True)
+    translator = models.CharField(max_length=100, blank=True, null=True)
+    publisher = models.CharField(max_length=100, blank=True, null=True)
+    publisher_date = models.DateField(blank=True, null=True)
+    book_format = models.CharField(max_length=20, blank=True, null=True)
+    pages = models.IntegerField(blank=True, null=True)
+    rating = models.IntegerField(blank=True, null=True)
+    cate_cd = models.CharField(max_length=10, blank=True, null=True)
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    reg_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    book_essay_url = models.CharField(max_length=1000, blank=True, null=True)
+    poster_url = models.CharField(max_length=1000, blank=True, null=True)
+    read_status = models.CharField(max_length=10, blank=True, null=True)
+    borrowed_yn = models.CharField(max_length=2, blank=True, null=True)
+    book_essay = models.CharField(max_length=4000, blank=True, null=True)
 
     class Meta:
         managed = False
-        db_table = 'book_read_hist'
+        db_table = 'book_info'
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()
@@ -152,8 +145,8 @@ class DjangoAdminLog(models.Model):
     object_repr = models.CharField(max_length=200)
     action_flag = models.SmallIntegerField()
     change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
+    content_type = models.ForeignKey('DjangoContentType', blank=True, null=True)
+    user = models.ForeignKey(AuthUser)
 
     class Meta:
         managed = False
@@ -188,3 +181,18 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
+
+
+class ReadHist(models.Model):
+    book_sequence = models.CharField(max_length=10, blank=True, null=True)
+    start_read_time = models.TimeField(blank=True, null=True)
+    end_read_time = models.TimeField(blank=True, null=True)
+    read_place = models.CharField(max_length=30, blank=True, null=True)
+    not_read_reason = models.CharField(max_length=100, blank=True, null=True)
+    start_page_num = models.IntegerField(blank=True, null=True)
+    end_page_num = models.IntegerField(blank=True, null=True)
+    read_date = models.DateField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'read_hist'

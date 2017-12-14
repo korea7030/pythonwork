@@ -1,112 +1,124 @@
-{% extends 'book/base.html' %}
+{% extends 'bookapp/base.html' %}
 {% block content %}
-<form class="navbar-form navbar-right" role="search" method="GET">
-	<div class="input-group">
-		<select class="select form-control" name="category_select" id="category_select">
-			<option value="">선택</option>
-			<option value="category">분류별</option>
-			<option value="rating">별점별</option>
-			<option value="format">형태별</option>
-			<option value="borrowed_yn">빌린여부</option>
-		</select>
-	</div>
-    <div class="input-group">
 
-        <input type="text" class="form-control" placeholder="검색어 입력" name="q" id="q">
-        <span class="input-group-btn">
-            <button type="submit" class="btn btn-default">
-           		<span class="glyphicon glyphicon-search"></span>
-            </button>
-        </span>
-    </div>
-    <input type="hidden" name="q_value" id="q_value" value = '{{q}}'>
-    <input type="hidden" name="select_value" id="select_value" value='{{category_select}}'>
+<div class="container">
+	<form class="navbar-form navbar-right" role="search" method="GET">
+		<div class="input-group">
+			<select class="select form-control" name="category_select" id="category_select">
+				<option value="">선택</option>
+				<option value="category">분류별</option>
+				<option value="rating">별점별</option>
+				<option value="format">형태별</option>
+				<option value="borrowed_yn">빌린여부</option>
+			</select>
+		</div>
 
-</form>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-       <th>표지</th>
-       <th style="display:none;">순번</th>
-       <th>제목</th>
-       <th style="display:none;">부제목</th>
-       <th>저자</th>
-       <th>책형태</th>
-       <th>페이지수</th>
-       <th>별점</th>
-       <th>분류</th>
-       <th>시작일자</th>
-       <th>끝일자</th>
-       <th style="display:none;">감상문파일</th>
-       <th style="display:none;">읽은상태</th>
-       <th>빌린여부</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for book in books %}
-        {% if book.read_status == "Reading" %}
-          <tr style="background-color:skyblue;">
+	    <div class="input-group">
 
-                <td><img src='{{ book.poster_url }}'/></td>
-                <td style="display:none;" id="book_seq">{{ book.book_sequence }}</td>
-                <td>{{ book.book_title }} <button type="button" data-id='{{book.book_sequence}}' class="btn btn-default editButton">Edit</button></td>
-                <td style="display:none;">{{ book.book_subtitle }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.book_format }}</td>
-                <td>{{ book.pages }}</td>
-                <td>{{ book.rating }}</td>
-                <td>{{ book.category_nm }}</td>
-                <td>{{ book.start_date}}</td>
-                <td>{{ book.end_date }}</td>
-                <td style="display:none;">{{ book.book_essay_url }}</td>
-                <td style="display:none;">{{ book.read_status }}</td>
-                <td>{{ book.borrowed_yn }}</td>
+	        <input type="text" class="form-control" placeholder="검색어 입력" name="q" id="q">
+	        <span class="input-group-btn">
+	            <button type="submit" class="btn btn-default">
+	           		<span class="glyphicon glyphicon-search"></span>
+	            </button>
+	        </span>
+	    </div>
+	    <input type="hidden" name="q_value" id="q_value" value = '{{q}}'>
+	    <!-- <input type="hidden" name="select_value" id="select_value" value='{{category_select}}'>
+			<input type="hidden" name="format_value" id="format_value" value='{{format_select}}'> -->
 
-          </tr>
-        {% else %}
-            <tr>
-                <td><img src='{{ book.poster_url }}'/></td>
-                <td style="display:none;" id="book_seq">{{ book.book_sequence }}</td>
-                <td>{{ book.book_title }} <button type="button" data-id='{{book.book_sequence}}' class="btn btn-default editButton">Edit</button></td>
-                <td style="display:none;">{{ book.book_subtitle }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.book_format }}</td>
-                <td>{{ book.pages }}</td>
-                <td>{{ book.rating }}</td>
-                <td>{{ book.category_nm }}</td>
-                <td>{{ book.start_date}}</td>
-                <td>{{ book.end_date }}</td>
-                <td style="display:none;">{{ book.book_essay_url }}</td>
-                <td style="display:none;">{{ book.read_status }}</td>
-                <td>{{ book.borrowed_yn }}</td>
+	</form>
+	<table class="table table-bordered">
+	  <thead>
+	    <tr>
+	       <th>표지</th>
+	       <th style="display:none;">순번</th>
+	       <th>제목</th>
+	       <th style="display:none;">부제목</th>
+	       <th>저자</th>
+	       <th>책형태</th>
+	       <th>페이지수</th>
+	       <th>별점</th>
+	       <th>분류</th>
+	       <th>시작일자</th>
+	       <th>끝일자</th>
+	       <th style="display:none;">감상문파일</th>
+	       <th style="display:none;">읽은상태</th>
+	       <th>빌린여부</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    {% for book in books %}
+	        {% if book.read_status == "Reading" %}
+	          <tr style="background-color:skyblue;">
+									{% if book.poster_url != "" %}
+	                	<td><img src='{{ book.poster_url }}'/></td>
+									{% else %}
+										<td><img src="/static/image/default_image.jpg"></img></td>
+									{% endif %}
+	                <td style="display:none;" id="book_seq">{{ book.book_sequence }}</td>
+	                <td>{{ book.book_title }} <button type="button" data-id='{{book.book_sequence}}' class="btn btn-default editButton">Edit</button></td>
+	                <td style="display:none;">{{ book.book_subtitle }}</td>
+	                <td>{{ book.author }}</td>
+	                <td>{{ book.book_format }}</td>
+	                <td>{{ book.pages }}</td>
+	                <td>{{ book.rating }}</td>
+	                <td>{{ book.cate_cd.cate_2 }}</td>
+	                <td>{{ book.start_date}}</td>
+	                <td>{{ book.end_date }}</td>
+	                <td style="display:none;">{{ book.book_essay_url }}</td>
+	                <td style="display:none;">{{ book.read_status }}</td>
+	                <td>{{ book.borrowed_yn }}</td>
 
-          </tr>
-        {% endif %}
-    {% endfor %}
-  </tbody>
-</table>
+	          </tr>
+	        {% else %}
+	            <tr>
+									{% if book.poster_url != "" %}
+										<td><img src='{{ book.poster_url }}'/></td>
+									{% else %}
+										<td><img src="/static/image/default_image.jpg"></img></td>
+									{% endif %}
+	                <td style="display:none;" id="book_seq">{{ book.book_sequence }}</td>
+	                <td>{{ book.book_title }} <button type="button" data-id='{{book.book_sequence}}' class="btn btn-default editButton">Edit</button></td>
+	                <td style="display:none;">{{ book.book_subtitle }}</td>
+	                <td>{{ book.author }}</td>
+	                <td>{{ book.book_format }}</td>
+	                <td>{{ book.pages }}</td>
+	                <td>{{ book.rating }}</td>
+	                <td>{{ book.cate_cd.cate_2 }}</td>
+	                <td>{{ book.start_date}}</td>
+	                <td>{{ book.end_date }}</td>
+	                <td style="display:none;">{{ book.book_essay_url }}</td>
+	                <td style="display:none;">{{ book.read_status }}</td>
+	                <td>{{ book.borrowed_yn }}</td>
 
-{% if books.has_other_pages %}
-  <ul class="pagination">
-    {% if books.has_previous %}
-      <li><a href="?page={{ books.previous_page_number }}&category_select={{category_select}}&q={{q}}">&laquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&laquo;</span></li>
-    {% endif %}
-    {% for i in books.paginator.page_range %}
-      {% if books.number == i %}
-        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
-      {% else %}
-        <li><a href="?page={{ i }}&category_select={{category_select}}&q={{q}}">{{ i }}</a></li>
-      {% endif %}
-    {% endfor %}
-    {% if books.has_next %}
-      <li><a href="?page={{ books.next_page_number }}&category_select={{category_select}}&q={{q}}">&raquo;</a></li>
-    {% else %}
-      <li class="disabled"><span>&raquo;</span></li>
-    {% endif %}
-  </ul>
-{% endif %}
+	          </tr>
+	        {% endif %}
+	    {% endfor %}
+	  </tbody>
+	</table>
+
+	{% if books.has_other_pages %}
+	  <ul class="pagination">
+	    {% if books.has_previous %}
+	      <li><a href="?page={{ books.previous_page_number }}&category_select={{category_select}}&q={{q}}">&laquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&laquo;</span></li>
+	    {% endif %}
+	    {% for i in books.paginator.page_range %}
+	      {% if books.number == i %}
+	        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+	      {% else %}
+	        <li><a href="?page={{ i }}&category_select={{category_select}}&q={{q}}">{{ i }}</a></li>
+	      {% endif %}
+	    {% endfor %}
+	    {% if books.has_next %}
+	      <li><a href="?page={{ books.next_page_number }}&category_select={{category_select}}&q={{q}}">&raquo;</a></li>
+	    {% else %}
+	      <li class="disabled"><span>&raquo;</span></li>
+	    {% endif %}
+	  </ul>
+	{% endif %}
+</div>
 
 <form id="bookForm" method="post" action="/book/update/" class="form-horizontal" style="display: none;">
 	{% csrf_token %}
@@ -196,7 +208,7 @@
         input_data['id' ] = id.trim();
 
         $.ajax({
-            url: '/book/get_book/',
+            url: '/bookapp/get_book/',
             type : 'get',
             // dataType: 'json',
             data : input_data,
@@ -207,7 +219,7 @@
             	  [{aaa : bbb, ccc : ddd}, {fff: eee, ggg: hhh}, ...]
             	  이와 같은 형태로 넘어오게 되면 eval을 써서 json string을 json object로 변환하자
             	 */
-            	var book_data = eval(data);
+            var book_data = eval(data);
 	        	console.log(book_data[0]);
 	        	console.log(book_data[0]['fields']['read_status']);
 
@@ -249,14 +261,14 @@
     	$('#bookForm').on('submit', function(e){
     		e.preventDefault();
     		$.ajax({
-    			url : "/book/update/",
+    			url : "/bookapp/update/",
     			type : "POST",
     			data : $('#bookForm').serialize(),
     			success: function(data) {
     				if (data == 'success') {
     					bootbox.hideAll();
     					alert("update 완료");
-    					window.location = '/book/book_list/';
+    					window.location = '/bookapp/book_list/';
     				} else {
     					alert("error 발생");
     				}

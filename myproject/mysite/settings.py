@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Django settings for mysite project.
 
@@ -15,13 +14,15 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+DATE_INPUT_FORMATS = ('%Y-%m-%d')
+LOGIN_REDIRECT_URL = '/' # 로그인 후 리다이렉트
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '1^!mmtmz0%9#b9qb5%!z$wr45zk1_r4^-=6&*dvrvlk^==rylp'
+SECRET_KEY = '5!3!t2op_ql!zuow%c#51fphg#_jq9w+^!m$)72$yldl^$q#6n'
+DAUM_API_URL = 'https://apis.daum.net/search/book?apikey='
 DAUM_API_KEY = '917124f7f8dd51950bdfa5bbcbf98219'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,15 +41,14 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     # install app
-    'book',
-
-    # REST framework
-    'rest_framework',
+    'bookapp',
 
     # crispy forms
     'crispy_forms',
+    # REST framework
+    # 'rest_framework',
 
-    # REST framework Swagger
+    # Rest framework Swagger
     # 'rest_framework_swagger'
 )
 
@@ -68,7 +68,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'book/template')], # template path setting
+        'DIRS': [os.path.join(BASE_DIR, 'bookapp/template')], # template path setting
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -83,7 +83,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-
+# authentication backends
+AUTHENTICATION_BACKENDS = (
+    'bookapp.custom_auth.LoginBackend',
+    'django.contrib.auth.backends.ModelBackend', # default
+     # any other authentication backends
+)
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -91,8 +96,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_book',
-        'USER' : 'jhlee',
-        'PASSWORD' : 'wogusdlRj1',
+        'USER' : 'postgres',
+        'PASSWORD' : '1234',
         'HOST' : 'localhost',
         'PORT' : '5432',
     }

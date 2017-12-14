@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """mysite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -16,18 +15,16 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from rest_framework import routers
-from book import views
+# from rest_framework import routers
+from bookapp import views
 
 # router = routers.DefaultRouter()
-# router.register(r'bookinfo', views.BookInfoViewSet)
-# router.register(r'bookdetail', views.BookInfoDetail)
+# router.register(r'books', views.BookInfoViewSet, base_name='book_info')
+# router.register(r'hist', views.ReadHistViewSet, base_name='book_hist')
 
 urlpatterns = [
-    url(r'^admin/', include(admin.site.urls)), # admin
-    url(r'^book/', include('book.urls', namespace='book')), # book app
-    # url(r'^rest-api/', include('rest_framework.urls')),
+    url(r'^admin/', include(admin.site.urls)),
     # url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-
+    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^bookapp/', include('bookapp.urls', namespace='bookapp'))
 ]

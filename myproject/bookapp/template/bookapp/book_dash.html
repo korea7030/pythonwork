@@ -1,0 +1,153 @@
+{% extends 'bookapp/base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="panel panel-default" style="width:100%; height:400px;">
+        <div class="panel-heading"><h4><b>분류별 책 현황</b></h4></div>
+        <div class="panel-body">
+          <div class="container">
+              <svg class="img-responsive center-block" id="test1"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <div class="panel panel-default" style="width:100%; height:400px;">
+        <div class="panel-heading"><h4><b>형태별 책 현황</b></h4></div>
+        <div class="panel-body">
+          <div class="container">
+              <svg class="img-responsive center-block" id="test2"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="panel panel-default">
+        <div class="panel-heading"><h4><b>월별 읽은 현황</b></h4></div>
+        <div class="panel-body">
+          <div class="container" style="width:100%;">
+              <svg class="img-responsive center-block" id="test3" style="width:100% !important;"></svg>
+          </div>
+      </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="panel panel-default">
+      <div class="panel-heading"><h4><b>최근 읽은 내역</b></h4></div>
+      <div class="panel-body">
+        <div class="container" style="overflow-x : auto;">
+          <ul class="list-inline book_list">
+          {% for book in books %}
+
+          {% if book.read_status == "Reading" %}
+            <li>
+              <div class="lst_div">
+                <p style="font-size:12px;"><b>{{book.book_title}}</b></p>
+                {% if book.poster_url != "" %}
+                  <p><img class="img-responsive center-block" src='{{book.poster_url}}'></img></p>
+                {% else %}
+                  <p><img class="img-responsive center-block" src="/static/image/default_image.jpg"></img></p>
+                {% endif %}
+
+              </div>
+            </li>
+          {% else %}
+            <li>
+              <div class="lst_div">
+                <p style="font-size:12px;"><b>{{book.book_title}}</b></p>
+                {% if book.poster_url != "" %}
+                  <p><img class="img-responsive center-block" src='{{book.poster_url}}'></img></p>
+                {% else %}
+                  <p><img class="img-responsive center-block" src="/static/image/default_image.jpg"></img></p>
+                {% endif %}
+              </div>
+            </li>
+          {% endif %}
+          {% endfor %}
+          </ul>
+        </div>
+    </div>
+    </div>
+
+      <!-- <div id="rating_content" class="col-xs-5" style="width:50%; height:400px;"></div>
+      <div id="borrowed_content" class="col-xs-5" style="width:50%; height:400px;"></div> -->
+  </div>
+</div>
+<script type="text/javascript">
+  var category_group_data = {{book_group_category|safe}};
+  var book_group_format = [{{book_group_format|safe}}];
+  var yearmonth_count = [{{yearmonth_count|safe}}];
+
+  nv.addGraph(function() {
+      var chart = nv.models.pieChart()
+          .x(function(d) { return d.cate_cd__cate_2 })  //x key 값
+          .y(function(d) { return d.total })            //y key 값
+          .valueFormat(function (d) { return d+"권"})
+          .titleOffset(0)
+          .labelsOutside(true)
+          .margin({"bottom":70})
+          .legendPosition("bottom")
+
+
+      d3.select("#test1")
+          .datum(category_group_data)
+          .transition()
+          .duration(1200)
+          // .attr('width', width)
+          // .attr('height', height)
+          .call(chart);
+      // update chart data values randomly
+      setInterval(function() {
+          category_group_data[0].y = Math.floor(Math.random() * 10);
+          category_group_data[1].y = Math.floor(Math.random() * 10);
+          chart.update();
+      }, 4000);
+      return chart;
+  });
+  nv.addGraph(function() {
+    var chart = nv.models.discreteBarChart()
+        .x(function(d) { return d.book_format })
+        .y(function(d) { return d.total })
+        .staggerLabels(true)
+        // .width(300)
+        .valueFormat(d3.format('d'))
+        //.staggerLabels(historicalBarChart[0].values.length > 8)
+        .showValues(true)
+        .duration(250)
+        .yDomain([0,100]);
+
+    chart.yAxis.tickFormat(function(d) { return d3.format('d')(d) + '권'; });
+    d3.select('#test2')
+        .datum(book_group_format)
+        .call(chart);
+    nv.utils.windowResize(chart.update);
+    return chart;
+  });
+
+  nv.addGraph(function() {
+    var chart = nv.models.discreteBarChart()
+        .x(function(d) { return d.read_year_month })
+        .y(function(d) { return d.count_items })
+        .staggerLabels(true)
+        .valueFormat(d3.format('d'))
+        //.staggerLabels(historicalBarChart[0].values.length > 8)
+        .showValues(true)
+        .duration(250)
+        .yDomain([0,35]);
+
+    // chart.yAxis.tickFormat(function(d) { return d3.format('d')(d) + '권'; });
+    d3.select('#test3')
+        .datum(yearmonth_count)
+        .call(chart);
+    nv.utils.windowResize(chart.update);
+    return chart;
+  });
+
+</script>
+{% endblock %}

@@ -1,0 +1,76 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{% static 'css/mysite.css' %}">
+	<link rel="stylesheet" href="{% static 'css/nv.d3.min.css' %}">
+	<!-- <script src="http://code.jquery.com/jquery-1.9.1.js"></script> -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+	<script src="https://cdn.pubnub.com/pubnub-3.15.2.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.2/d3.min.js" charset="utf-8"></script>
+	<script src="{% static 'js/d3.layout.cloud.js' %}"></script>
+	<script src="{% static 'js/mysite.js' %}"></script>
+	<script src="{% static 'js/nv.d3.min.js' %}"></script>
+	<script src="{% static 'js/stream_layers.js' %}"></script>
+	<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
+
+	<title>{{title}}</title>
+</head>
+<body>
+<div id="wrapper">
+		<div class="overlay"></div>
+		<!-- Sidebar -->
+        <nav class="navbar navbar-inverse navbar-fixed-top" id="sidebar-wrapper" role="navigation">
+            <ul class="nav sidebar-nav">
+                <li class="sidebar-brand">
+									<a href="/bookapp/">읽은 책 저장</a></li>
+                <li>
+									<a href="/bookapp/book_list/">책정보 조회</a></li>
+                <li>
+                    <a href="/bookapp/dash/">DASHBOARD</a>
+                </li>
+								<li>
+                    <a href="#">분석</a>
+										<ul class="analytic-sub">
+											<li><a href="/bookapp/analytic_word">사용단어</a></li>
+										</ul>
+                </li>
+								{% if request.session.user_id != None %}
+								<li>
+									<a href="/bookapp/logout">로그아웃</a>
+								</li>
+								{% else %}
+								<li>
+									<a href="/bookapp/login">로그인</a>
+								</li>
+								{% endif %}
+            </ul>
+        </nav>
+        <!-- /#sidebar-wrapper -->
+				<button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+							<span class="hamb-top"></span>
+							<span class="hamb-middle"></span>
+							<span class="hamb-bottom"></span>
+        </button>
+<div id="page-content-wrapper">
+	<div class="row row-offcanvas">
+
+		<!--8. 모바일 시 사이드 메뉴 숨기기 시작 -->
+		<!-- <p class="pull-right visible-xs"> <button type="button"	 class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button> </p> -->
+		<!--모바일 시 사이드 메뉴 숨기기 끝 -->
+	{% block content %}{% endblock %}
+
+	</div>
+</div>
+</div>
+<footer> <p>&copy; Company 2013</p> </footer>
+</body>
+</html>
