@@ -1,6 +1,5 @@
 ## Algorithm 코드
 
-> ## 폴더 설명
 - **bubble_sort.py** : 버블정렬
 - **divide_merge.py	** : 병합정렬
 - **divide_sum.py** : 병합정렬 기반 합계 구하기
