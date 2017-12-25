@@ -1,7 +1,7 @@
 ## Algorithm 코드
 
 - **bubble_sort.py** : 버블정렬
-- **divide_merge.py	** : 병합정렬
+- **divide_merge.py** : 병합정렬
 - **divide_sum.py** : 병합정렬 기반 합계 구하기
 - **gcm_test.py** : 최대공약수 & 최소공배수
 - **insertion_sort.py** : 삽입정렬
