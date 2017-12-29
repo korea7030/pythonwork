@@ -12,7 +12,7 @@ from selenium import webdriver
 
 truedelta_url = 'http://www.truedelta.com/problems'
 
-## Select model Id : rh-model, xpath : /html/body/div[3]/div[2]/div/div[1]/form/fieldset/table/tbody/tr[4]/td/select 
+# Select model Id : rh-model, xpath : /html/body/div[3]/div[2]/div/div[1]/form/fieldset/table/tbody/tr[4]/td/select
 
 driver = webdriver.Firefox()
 driver.get(truedelta_url)
@@ -24,12 +24,14 @@ driver.implicitly_wait(10)
 # element_model = driver.find_element_by_id('rh-model')
 
 # get xpath
-element_model = driver.find_element_by_xpath("/html/body/div[3]/div[2]/div/div[1]/form/fieldset/table/tbody/tr[4]/td/select[@name='model']")
+element_model = driver.find_element_by_xpath(
+    "/html/body/div[3]/div[2]/div/div[1]/form/fieldset/table/tbody/tr[4]/td/select[@name='model']")
 
-search = driver.find_element_by_xpath("/html/body/div[3]/div[2]/div/div[1]/form/fieldset/div/input[2]")
+search = driver.find_element_by_xpath(
+    "/html/body/div[3]/div[2]/div/div[1]/form/fieldset/div/input[2]")
 no_result = re.compile('No Results')
 
-# get list 
+# get list
 list_year = [x for x in element_year.find_elements_by_tag_name("option")]
 
 # print("brand = "+str(list_brand))
@@ -37,14 +39,14 @@ list_year = [x for x in element_year.find_elements_by_tag_name("option")]
 # print("model = "+str(list_model))
 
 for year in list_year:
-    if (year.get_attribute("value") == "") :
+    if (year.get_attribute("value") == ""):
         continue
-    else :
+    else:
         year.click()
         list_brand = [x for x in element_brand.find_elements_by_tag_name("option")]
         for brand in list_brand:
             # brand.text - option text 값
-            # brand.get_attribute("value") - option value값            
+            # brand.get_attribute("value") - option value값
             if (brand.get_attribute("value") == ""):
                 continue
             else:
@@ -53,22 +55,23 @@ for year in list_year:
                 for model in list_model:
                     if (model.get_attribute("value") == ""):
                         continue
-                    else:                        
+                    else:
                         model.click()
-                        list_probarea = [x for x in element_probarea.find_elements_by_tag_name("option")]
+                        list_probarea = [
+                            x for x in element_probarea.find_elements_by_tag_name("option")]
                         for prob in list_probarea:
-                            if (prob.get_attribute("value")== ""):
+                            if (prob.get_attribute("value") == ""):
                                 continue
                             else:
                                 prob.click()
                                 search.click()
                                 html = driver.page_source
                                 print(html)
-                                ## No Results 여부 판단
+                                # No Results 여부 판단
                                 if (not re.findall(no_result, html)):
                                     print("1")
                                     soup = BeautifulSoup(html)
-                                    try :
+                                    try:
                                         print("2")
                                         # 수리내역 가져오기
                                         contents = soup.find(id="problems")
@@ -77,6 +80,6 @@ for year in list_year:
                                         continue
                                 else:
                                     continue
-                            print("!!!")          
+                            print("!!!")
                             driver.back()
                             continue

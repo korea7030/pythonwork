@@ -13,16 +13,16 @@ filename = "test.pkl"
 # pkl file open
 f = open(filename, "rb")
 
-# train_set, valid_set, test_set 
+# train_set, valid_set, test_set
 train_set, valid_set, test_set = cPickle.load(f)
 
-# divide imagefile, answer 
+# divide imagefile, answer
 imagefile, answer = train_set
 
 # image print
-plt.imshow(imagefile[0].reshape((100,100)), cmap=cm.Greys_r)
+plt.imshow(imagefile[0].reshape((100, 100)), cmap=cm.Greys_r)
 
-# show answer 
+# show answer
 print answer[0]
 
 # show plot

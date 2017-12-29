@@ -7,23 +7,29 @@
   : (1+2+...+N/2)+(N/2+N/2+N/2+N/2)+(1+2+3+...+N/2)
   : (2*(1+2+...+N/2))*((N/2)*(N/2))
 '''
-def divide_merge_sum(n:int):
-    if n==1:
-        return 1
-    if n%2 == 1:
-        return n+divide_merge_sum(n-1)
 
-    return (2*divide_merge_sum(n/2))+((n/2)*(n/2))
+
+def divide_merge_sum(n: int):
+    if n == 1:
+        return 1
+    if n % 2 == 1:
+        return n + divide_merge_sum(n - 1)
+
+    return (2 * divide_merge_sum(n / 2)) + ((n / 2) * (n / 2))
+
 
 '''
 1~N 까지의 합을 재귀함수로 구현
 '''
-def sum(n:int):
-    if n==1:
+
+
+def sum(n: int):
+    if n == 1:
         return 1
     else:
-        return n+sum(n-1)
+        return n + sum(n - 1)
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     print(divide_merge_sum(100))
     print(sum(100))

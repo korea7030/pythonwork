@@ -8,16 +8,16 @@ Created on Sat Dec 19 09:16:16 2015
 import nltk
 from nltk.book import *
 
-#text preparation
-text="The new international standard details the requirements, capabilities and uses of cloud-based big data, with an eye toward ensuring that its benefits can be achieved on a global scale. It also outlines how cloud computing systems can be leveraged to provide big-data services."
+# text preparation
+text = "The new international standard details the requirements, capabilities and uses of cloud-based big data, with an eye toward ensuring that its benefits can be achieved on a global scale. It also outlines how cloud computing systems can be leveraged to provide big-data services."
 
-#text tokenization
-text_tokens=nltk.word_tokenize(text)
+# text tokenization
+text_tokens = nltk.word_tokenize(text)
 
-#create nltk text
+# create nltk text
 nltk_text = nltk.Text(text_tokens)
 
-#text normalization
+# text normalization
 words = [w.lower() for w in nltk_text]
 
 print(words)
@@ -41,18 +41,18 @@ context.
 """
 nltk_text.concordance("cloud")
 
-#counting words / tokens
+# counting words / tokens
 len(nltk_text)
 
-#counting # of unique words
+# counting # of unique words
 len(set(nltk_text))
 
-#counting # of a specific word
+# counting # of a specific word
 nltk_text.count('data')
 
-#Frequency distribution
+# Frequency distribution
 fdist1 = FreqDist(nltk_text)
-#couting # of a specific word
+# couting # of a specific word
 fdist1['data']  # 1
 
 # draw a plot of the distribution
@@ -75,6 +75,6 @@ fdist.plot(cumulative=True) Cumulative plot of the frequency distribution
 fdist1 < fdist2 Test if samples in fdist1 occur less frequently than in fdist2
 """
 
-#lemmatization
+# lemmatization
 wnl = nltk.WordNetLemmatizer()
 lem_results = [wnl.lemmatize(t) for t in nltk_text]

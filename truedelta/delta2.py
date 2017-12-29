@@ -5,13 +5,6 @@ Created on Fri Nov 27 23:51:08 2015
 @author: Sang
 """
 
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov 27 23:08:39 2015
-
-@author: Sang
-"""
-
 from bs4 import BeautifulSoup
 import codecs
 from selenium import webdriver
@@ -50,7 +43,7 @@ for option in year_all_options:
         break
 #    option.click()
 
-        
+
 make_element= driver.find_element_by_id('compare-make')
 make_all_options = make_element.find_elements_by_tag_name("option")
 make_count=0
@@ -101,28 +94,7 @@ if (not re.findall(no_result, html)):
         print ("error")
     print(contents)
 else :
-    print("empty page")    
+    print("empty page")
 
-#is_private = re.compile('profile is private.')
-#not re.findall(is_private, player_html)
-
-# print(str(soup))
-
-
-
-    
-
-
-#driver.implicitly_wait(10)
-#html = driver.page_source
-
-    
-#jcode = element.get_attribute("onclick")
-#driver.execute_script(jcode)
-#driver.implicitly_wait(10)
-#html = driver.page_source
-
-#f_sele.write(html)
 
 driver.close()
-#f_sele.close()

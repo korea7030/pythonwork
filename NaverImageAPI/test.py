@@ -17,12 +17,12 @@ with open('inven.csv', 'w', encoding='utf8') as f:
         element = lxml.html.fromstring(res.text)
         for news_link in element.xpath('.//a[@class="sj_ln"]'):
             try:
-                res = requests.get(news_link.attrib['href']) # 인벤 뉴스 링크
+                res = requests.get(news_link.attrib['href'])  # 인벤 뉴스 링크
                 # print(news_link.attrib['href'])
                 news = lxml.html.fromstring(res.text)
                 # print (news[1].text_content())
                 body = news.xpath('.//div[@class="articleContent"]')[0]
-                print (body.text_content())
+                print(body.text_content())
                 writer.writerow([body.text_content()])
             except:
                 continue

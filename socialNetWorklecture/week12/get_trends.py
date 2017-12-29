@@ -5,13 +5,13 @@ import twitter
 import json
 import codecs
 #import sys
-#sys.setdefaultencoding("utf-8")
+# sys.setdefaultencoding("utf-8")
 #import site
 
-OAUTH_TOKEN='183506593-dzJ6MKlJJDOBelxnuiPvFHGyYdqYvAfh6SnGuOum'
-OAUTH_TOKEN_SECRET='Rbn9QwnYvPnroDg6F0F3FuQ2djlA5qkS477QYnC607W0E'
-CONSUMER_KEY='AYrRdSWWRL2UrAaiCy4mz8BDS'
-CONSUMER_SECRET='EKH59E3IOWZLVkSjYdRPBKDOpgzsR3qQTM50ZYk2OsBj0l2EbQ'
+OAUTH_TOKEN = '183506593-dzJ6MKlJJDOBelxnuiPvFHGyYdqYvAfh6SnGuOum'
+OAUTH_TOKEN_SECRET = 'Rbn9QwnYvPnroDg6F0F3FuQ2djlA5qkS477QYnC607W0E'
+CONSUMER_KEY = 'AYrRdSWWRL2UrAaiCy4mz8BDS'
+CONSUMER_SECRET = 'EKH59E3IOWZLVkSjYdRPBKDOpgzsR3qQTM50ZYk2OsBj0l2EbQ'
 
 auth = twitter.oauth.OAuth(OAUTH_TOKEN, OAUTH_TOKEN_SECRET,
                            CONSUMER_KEY, CONSUMER_SECRET)
@@ -21,7 +21,7 @@ twitter_api = twitter.Twitter(auth=auth)
 # Nothing to see by displaying twitter_api except that it's now a
 # defined variable
 
-#print twitter_api
+# print twitter_api
 
 # The Yahoo! Where On Earth ID for the entire world is 1.
 # See https://dev.twitter.com/docs/api/1.1/get/trends/place and
@@ -31,7 +31,6 @@ WORLD_WOE_ID = 1
 US_WOE_ID = 23424977
 SKOREA_WOE_ID = 23424868
 SEOUL_WOE_ID = 1132599
-
 
 
 # Prefix ID with the underscore for query string parameterization.
@@ -44,7 +43,7 @@ korea_trends = twitter_api.trends.place(_id=SKOREA_WOE_ID)
 seoul_trends = twitter_api.trends.place(_id=SEOUL_WOE_ID)
 
 print(seoul_trends)
-#name1=korea_trends[0]['trends'][0]['name']
+# name1=korea_trends[0]['trends'][0]['name']
 #korea_trends=json.dumps(korea_trends, indent=1)
 #us_trends=json.dumps(us_trends, indent=1)
 

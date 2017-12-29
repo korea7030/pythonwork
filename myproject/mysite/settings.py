@@ -15,7 +15,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATE_INPUT_FORMATS = ('%Y-%m-%d')
-LOGIN_REDIRECT_URL = '/' # 로그인 후 리다이렉트
+LOGIN_REDIRECT_URL = '/'  # 로그인 후 리다이렉트
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -68,7 +68,7 @@ ROOT_URLCONF = 'mysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'bookapp/template')], # template path setting
+        'DIRS': [os.path.join(BASE_DIR, 'bookapp/template')],  # template path setting
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -86,8 +86,8 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # authentication backends
 AUTHENTICATION_BACKENDS = (
     'bookapp.custom_auth.LoginBackend',
-    'django.contrib.auth.backends.ModelBackend', # default
-     # any other authentication backends
+    'django.contrib.auth.backends.ModelBackend',  # default
+    # any other authentication backends
 )
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -96,10 +96,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_book',
-        'USER' : 'postgres',
-        'PASSWORD' : '1234',
-        'HOST' : 'localhost',
-        'PORT' : '5432',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 

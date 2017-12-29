@@ -1,11 +1,12 @@
 class Node:
     def __init__(self, item):
-        self.item = item    ## item
-        self.next = None    ## next
+        self.item = item  # item
+        self.next = None  # next
+
 
 class LinkedList:
     def __init__(self):
-        self.head = None    ## 첫번째 노드를 가리킴
+        self.head = None  # 첫번째 노드를 가리킴
 
     def push(self, item):
         new_node = Node(item)
@@ -51,14 +52,14 @@ class LinkedList:
                 temp = temp.next
 
         if flag:
-            print ("find", temp.item)
+            print("find", temp.item)
         else:
-            print ("Not find")
+            print("Not find")
 
     def remove(self, item):
         prev = None
-        current =self.head
-        flag= False
+        current = self.head
+        flag = False
 
         while current is not None and flag is False:
             if (current.item == item):
@@ -68,10 +69,10 @@ class LinkedList:
                 current = current.next
 
         if current is None:
-            print ("not find")
-        elif prev == None:              ## 노드가 한개 일때 삭제한 경우
+            print("not find")
+        elif prev == None:  # 노드가 한개 일때 삭제한 경우
             self.head = current.next
-        else:                           ## None 값 대입
+        else:  # None 값 대입
             prev.next = current.next
 
     def get_last_n_node(self, n):
@@ -91,7 +92,8 @@ class LinkedList:
 
         return temp1.item
 
-if __name__=="__main__":
+
+if __name__ == "__main__":
     linked_list = LinkedList()
     linked_list.push(1)
     linked_list.push(2)

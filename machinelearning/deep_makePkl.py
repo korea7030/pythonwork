@@ -10,23 +10,23 @@ import PIL
 from PIL import Image
 import numpy
 
-hsize=100
+hsize = 100
 
 # read maked image file
 I = numpy.asarray(PIL.Image.open('0_modified.jpg'))
 
-# pixel list 
+# pixel list
 arr = []
 
-# to make pkl file 
+# to make pkl file
 # 0~255 normalization
-for i in range(0, len(I)*hsize):
-    arr.append(numpy.float32((I[i/hsize][i%hsize] / 255.0)))
+for i in range(0, len(I) * hsize):
+    arr.append(numpy.float32((I[i / hsize][i % hsize] / 255.0)))
 
 # numpy.array type convert
 arr = numpy.array(arr)
 
-# .pkl format 
+# .pkl format
 imagearr = [arr]
 imagearr = numpy.array(imagearr)
 

@@ -114,6 +114,7 @@ class BookInfo(models.Model):
         managed = False
         db_table = 'book_info'
 
+
 class BookSaveInfo(models.Model):
     book_sequence = models.CharField(primary_key=True, max_length=10)
     book_title = models.CharField(max_length=200, blank=True, null=True)
@@ -138,6 +139,7 @@ class BookSaveInfo(models.Model):
     class Meta:
         managed = False
         db_table = 'book_info'
+
 
 class DjangoAdminLog(models.Model):
     action_time = models.DateTimeField()

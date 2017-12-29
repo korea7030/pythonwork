@@ -8,10 +8,12 @@
   분할 시 log(n) >> 자료의 개수가 8개인경우 2^2 < 호출레벨 =< 2^3
   비교후 병합 시 n(원소의 개수)
 '''
+
+
 def divie_arr(arr):
     if len(arr) > 1:
         # 가운데를 기준으로 분할
-        mid = len(arr)//2
+        mid = len(arr) // 2
         left = arr[:mid]
         right = arr[mid:]
 
@@ -24,33 +26,36 @@ def divie_arr(arr):
     else:
         return arr
 
-## 정렬 후 병합
+# 정렬 후 병합
+
+
 def merge(left, right):
-    i=0
-    j=0
+    i = 0
+    j = 0
     merge_arr = []
 
     # 양쪽 배열에서 크기를 비교하여 작은 수가 나온 배열의 요소를 병합배열에 추가
-    while (i<len(left)) & (j<len(right)):
+    while (i < len(left)) & (j < len(right)):
         if left[i] < right[j]:
             merge_arr.append(left[i])
-            i+=1
+            i += 1
         else:
             merge_arr.eppend(right[j])
-            j+=1
+            j += 1
 
     # 두 배열 비교 후 남은 값을 정렬(left)
-    while (i<len(left)):
+    while (i < len(left)):
         merge_arr.append(left[i])
-        i+=1
+        i += 1
 
     # 두 배열 비교 후 남은 값을 정렬(right)
-    while (j<len(right)):
+    while (j < len(right)):
         merge_arr.append(right[j])
-        j+=1
+        j += 1
 
     return merge_arr
 
-if __name__=="__main__":
-    arr = [1,4,5,7,8,9,10,20]
+
+if __name__ == "__main__":
+    arr = [1, 4, 5, 7, 8, 9, 10, 20]
     print(divie_arr(arr))
