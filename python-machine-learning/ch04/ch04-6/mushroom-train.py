@@ -9,7 +9,7 @@ mr = pd.read_csv("mushroom.csv", header=None)
 
 # 데이터 내부의 기호를 숫자로 변환
 label = []
-data= []
+data = []
 attr_list = []
 
 for row_index, row in mr.iterrows():

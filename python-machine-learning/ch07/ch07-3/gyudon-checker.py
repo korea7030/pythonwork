@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import gyudon-keras as gyudon
-import sys, os
+import gyudon - keras as gyudon
+import sys
+import os
 from PIL import Image
 import numpy as np
 

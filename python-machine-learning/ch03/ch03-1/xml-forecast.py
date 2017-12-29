@@ -17,8 +17,8 @@ soup = BeautifulSoup(xml, "html.parser")
 # 각 지역 확인
 info = {}
 for location in soup.find_all("location"):
-    name=location.find('city').string
-    weather=location.find('wf').string
+    name = location.find('city').string
+    weather = location.find('wf').string
     if not (weather in info):
         info[weather] = []
     info[weather].append(name)

@@ -3,13 +3,14 @@ from konlpy.tag import Twitter
 import sys
 import math
 
+
 class BayesianFilter:
     """ 베이지안 필터 """
 
     def __init__(self):
-        self.words = set() # 출현한 단어 기록
-        self.word_dict = {} # 카테고리마다의 출현 횟수
-        self.category_dict = {} # 카테고리 출현 횟수 기록
+        self.words = set()  # 출현한 단어 기록
+        self.word_dict = {}  # 카테고리마다의 출현 횟수
+        self.category_dict = {}  # 카테고리 출현 횟수 기록
 
     # 형태소 분석
     def split(self, text):
@@ -40,7 +41,7 @@ class BayesianFilter:
         # 카테고리 계산
         if not category in self.category_dict:
             self.category_dict[category] = 0
-        self.category_dict[category] +=1
+        self.category_dict[category] += 1
 
     # 텍스트 학습
     def fit(self, text, category):
@@ -87,6 +88,6 @@ class BayesianFilter:
 
     # 카테고리 내부의 단어 출현 비율 계산
     def word_prob(self, word, category):
-        n = self.get_word_count(word, category) +1
+        n = self.get_word_count(word, category) + 1
         d = sum(self.word_dict[category].values()) + len(self.words)
-        return n/d
+        return n / d

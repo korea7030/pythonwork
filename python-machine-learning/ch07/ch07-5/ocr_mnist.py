@@ -10,6 +10,7 @@ image_w = 28
 image_h = 28
 nb_classes = 10
 
+
 def main():
     # MNIST 데이터 읽기
     (X_train, y_train), (X_test, y_test) = mnist.load_data()
@@ -24,7 +25,8 @@ def main():
 
     # 모델 구축
     model = build_model()
-    model.fit(X_train, y_train, batch_size=128, nb_epoch=20, verbose=1, validation_data=(X_test, y_test))
+    model.fit(X_train, y_train, batch_size=128, nb_epoch=20,
+              verbose=1, validation_data=(X_test, y_test))
 
     # 모델 저장
     model.save_weights('mnist.hdf5')
@@ -32,6 +34,7 @@ def main():
     # 모델 평가
     score = model.evaluate(X_test, y_test, verbose=0)
     print('score =', score)
+
 
 def build_model():
     # MLP 모델 구축
@@ -45,9 +48,10 @@ def build_model():
     model.add(Dense(10))
     model.add(Activation('softmax'))
 
-    model.compile(loss='categorical_crossentropy', optimizer = RMSprop(), metrics = ['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer=RMSprop(), metrics=['accuracy'])
 
     return model
+
 
 if __name__ == "__main__":
     main()

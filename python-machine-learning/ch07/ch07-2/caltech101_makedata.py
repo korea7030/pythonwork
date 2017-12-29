@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from PIL import Image
-import os, glob
+import os
+import glob
 import numpy as np
 from sklearn.model_selection import train_test_split
 
@@ -31,15 +32,15 @@ for idx, cat in enumerate(categories):
     flamingo(4)      [0,0,0,0,1]
     '''
     # 이미지
-    image_dir = caltech_dir+"/"+cat
-    files = glob.glob(image_dir+'/*.jpg')
+    image_dir = caltech_dir + "/" + cat
+    files = glob.glob(image_dir + '/*.jpg')
 
     for i, f in enumerate(files):
         img = Image.open(f)
-        img = img.convert("RGB") # RGB
-        img = img.resize((image_w, image_h)) # 이미지 크기 지정(64 x 64)
+        img = img.convert("RGB")  # RGB
+        img = img.resize((image_w, image_h))  # 이미지 크기 지정(64 x 64)
 
-        data = np.asarray(img) # numpy 배열로 전환
+        data = np.asarray(img)  # numpy 배열로 전환
 
         X.append(data)
         Y.append(label)
@@ -51,7 +52,7 @@ X = np.array(X)
 Y = np.array(Y)
 
 # 학습 전용 데이터와 테스트 전용 데이터 구분
-X_train, X_test, y_train, y_test = train_test_split(X,Y)
+X_train, X_test, y_train, y_test = train_test_split(X, Y)
 
 xy = (X_train, X_test, y_train, y_test)
 np.save("../image/5obj.npy", xy)

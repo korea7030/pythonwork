@@ -12,7 +12,10 @@ cites = ["Seoul,KR", "Tokyo,JP", "New York,US"]
 api = "http://api.openweathermap.org/data/2.5/weather?q={city}&appid={key}"
 
 # 캘빈 온도는 섭씨 온도로 변환
-k2c = lambda k: k-273.15
+
+
+def k2c(k): return k - 273.15
+
 
 # 각 도시의 정보 추출
 for name in cites:

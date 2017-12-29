@@ -11,7 +11,8 @@ data = []
 rows = csv.split("\r\n")
 
 for row in rows:
-    if row == "": continue
+    if row == "":
+        continue
 
     cells = row.split(",")
     data.append(cells)

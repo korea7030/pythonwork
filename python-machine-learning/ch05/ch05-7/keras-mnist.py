@@ -9,7 +9,7 @@ from keras.utils import np_utils
 (X_train, y_train), (X_test, y_test) = mnist.load_data()
 
 # 데이터를 float32 자료형으로 변환
-X_train = X_train.reshape(60000,784).astype("float32")
+X_train = X_train.reshape(60000, 784).astype("float32")
 X_test = X_test.reshape(10000, 784).astype('float')
 X_train /= 255
 X_test /= 255
@@ -19,7 +19,7 @@ y_train = np_utils.to_categorical(y_train, 10)
 y_test = np_utils.to_categorical(y_test, 10)
 
 # 모델 구조 정의
-model =Sequential()
+model = Sequential()
 model.add(Dense(512, input_shape=(784,)))
 model.add(Activation('relu'))
 model.add(Dropout(0.2))
@@ -31,9 +31,9 @@ model.add(Activation('softmax'))
 
 # 모델 구축
 model.compile(
-    loss = 'categorical_crossentropy',
-    optimizer = Adam(),
-    metrics = ['accuracy']
+    loss='categorical_crossentropy',
+    optimizer=Adam(),
+    metrics=['accuracy']
 )
 
 # 데이터 훈련

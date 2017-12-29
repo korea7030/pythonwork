@@ -14,8 +14,8 @@ xor_input = [
 
 # 입력을 위한 학습 데이터와 테스트 데이터 분리
 xor_df = pd.DataFrame(xor_input)
-xor_data = xor_df.ix[:, 0:1] # 데이터
-xor_label = xor_df.ix[:,2]
+xor_data = xor_df.ix[:, 0:1]  # 데이터
+xor_label = xor_df.ix[:, 2]
 
 # 학습결과 예측
 clf = svm.SVC()

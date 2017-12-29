@@ -19,6 +19,6 @@ t = datetime.date.today()
 import os
 print(os.getcwd())
 
-frame = t.strftime("%Y-%m-%d")+".txt"
+frame = t.strftime("%Y-%m-%d") + ".txt"
 with open(frame, 'w', encoding="utf-8") as f:
     f.write(price)

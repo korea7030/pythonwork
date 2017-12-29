@@ -9,10 +9,10 @@ tbl = pd.read_csv("bmi.csv")
 
 # 컬럼명을 거르고 정규화
 label = tbl["label"]
-w = tbl["weight"] / 100 # 최대 100 kg 이라 가정
-h = tbl["height"] / 200 # 최대 200cm 이라 가정
+w = tbl["weight"] / 100  # 최대 100 kg 이라 가정
+h = tbl["height"] / 200  # 최대 200cm 이라 가정
 
-wh = pd.concat([w,h], axis=1) # 열
+wh = pd.concat([w, h], axis=1)  # 열
 
 # 학습전용 데이터와 테스트 데이터 분류
 data_train, data_test, label_train, label_test = train_test_split(wh, label)

@@ -12,9 +12,9 @@ mnist.load_weights('mnist.hdf5')
 im = cv2.imread('numbers100.PNG')
 
 # 윤곽 추출
-gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY) # 그레이 스케일로 변환
-blur = cv2.GaussianBlur(gray, (5,5), 0) # 블러
-thresh = cv2.adaptiveThreshold(blur, 255, 1, 1, 11, 2) # 2진화
+gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)  # 그레이 스케일로 변환
+blur = cv2.GaussianBlur(gray, (5, 5), 0)  # 블러
+thresh = cv2.adaptiveThreshold(blur, 255, 1, 1, 11, 2)  # 2진화
 cv2.imwrite("numbers100-th.PNG", thresh)
 
 contous = cv2.findContous(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[1]
@@ -24,30 +24,32 @@ rects = []
 im_w = im.shape[1]
 
 for i, cnt in enumerate(contous):
-    x,y,w,h = cv2.boundingRect(cnt)
-    if w < 10 or h < 10: continue # 너무 작으면 생략
-    if w > im_w / 5: continue # 너무 크면 생략
+    x, y, w, h = cv2.boundingRect(cnt)
+    if w < 10 or h < 10:
+        continue  # 너무 작으면 생략
+    if w > im_w / 5:
+        continue  # 너무 크면 생략
     y2 = round(y / 10)
-    index = y2* im_w +x
-    rects.append((index, x,y,w,h))
+    index = y2 * im_w + x
+    rects.append((index, x, y, w, h))
 
-retcs = sorted(rects, key=lambda x:x[0]) # 정렬
+retcs = sorted(rects, key=lambda x: x[0])  # 정렬
 
 # 해당 영역의 이미지 데이터 추출
 X = []
 for i, r in enumerate(rects):
-    index, x,y,w,h = r
-    num = gray[y:y+h, x:x+w] # 부분 이미지 추출
-    num = 255 - num # 반전
+    index, x, y, w, h = r
+    num = gray[y:y + h, x:x + w]  # 부분 이미지 추출
+    num = 255 - num  # 반전
     ww = round((w if w > h else h) * 1.85)
     spc = np.zeros((ww, ww))
-    wy = (ww-h) // 2
-    wx = (ww-w) //2
-    spc[wy:wy+h, wx:wx+w] = num
-    num = cv2.resize(spc, (28,28)) # MNIST 크기 맞추기
+    wy = (ww - h) // 2
+    wx = (ww - w) // 2
+    spc[wy:wy + h, wx:wx + w] = num
+    num = cv2.resize(spc, (28, 28))  # MNIST 크기 맞추기
 
     # 데이터 정규화
-    num = num.reshape(28*28)
+    num = num.reshape(28 * 28)
     num = num.astype("float32") / 255
     X.append(num)
 
@@ -66,6 +68,6 @@ for i, n in enumerate(nlist):
     if ans == int(answer[i]):
         ok += 1
     else:
-        print("[ng]", i, "번째", ans, "!=", answer[i], np.int32(n*100))
+        print("[ng]", i, "번째", ans, "!=", answer[i], np.int32(n * 100))
 
 print("정답률:", ok / len(nlist))

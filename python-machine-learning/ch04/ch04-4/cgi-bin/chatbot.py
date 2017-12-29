@@ -6,21 +6,30 @@ from botengine import make_reply
 form = cgi.FieldStorage()
 
 # 메인 처리 --- (※2)
+
+
 def main():
     m = form.getvalue("m", default="")
-    if   m == "" : show_form()
-    elif m == "say" : api_say()
+    if m == "":
+        show_form()
+    elif m == "say":
+        api_say()
 
 # 사용자의 입력에 응답하기 --- (※3)
+
+
 def api_say():
     print("Content-Type: text/plain; charset=utf-8")
     print("")
     txt = form.getvalue("txt", default="")
-    if txt == "": return
+    if txt == "":
+        return
     res = make_reply(txt)
     print(res)
 
 # 입력 양식 출력하기 --- (※4)
+
+
 def show_form():
     print("Content-Type: text/html; charset=utf-8")
     print("")
@@ -57,5 +66,6 @@ def show_form():
     }
     </script></body></html>
     """)
+
 
 main()

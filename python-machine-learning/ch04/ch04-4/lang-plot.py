@@ -15,11 +15,11 @@ for i, lbl in enumerate(freq[0]["labels"]):
         lang_dic[lbl] = fq
         continue
     for idx, v in enumerate(fq):
-        lang_dic[lbl][idx] = (lang_dic[lbl][idx]+v) / 2
+        lang_dic[lbl][idx] = (lang_dic[lbl][idx] + v) / 2
 
 
 # pandas 의 dataframe 넣기
-asclist = [[chr(n) for n in range(97, 97+26)]]
+asclist = [[chr(n) for n in range(97, 97 + 26)]]
 df = pd.DataFrame(lang_dic, index=asclist)
 
 # 그래프 그리기

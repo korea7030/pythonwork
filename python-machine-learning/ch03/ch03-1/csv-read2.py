@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import csv, codecs
+import csv
+import codecs
 
 # CSV 파일 열기
 filename = "list-euckr.csv"

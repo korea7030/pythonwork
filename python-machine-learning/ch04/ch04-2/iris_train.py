@@ -1,17 +1,18 @@
 # -*- coding: utf-8 -*-
 from sklearn import svm, metrics
-import random, re
+import random
+import re
 
 # 붓꽃의 CSV 데이터 읽어 들이기
 csv = []
 with open('iris.csv', 'r', encoding='utf-8') as fp:
     # 한 줄씩 읽어 들이기
     for line in fp:
-        line = line.strip() # 줄바꿈 제거
-        cols = line.split(",") # 쉽표 자르기
+        line = line.strip()  # 줄바꿈 제거
+        cols = line.split(",")  # 쉽표 자르기
 
         # 삼항 연산자((True 조건) if (조건) else (False 일때 값))
-        fn = lambda n : float(n) if re.match(r'^[0-9\.]+$', n) else n
+        def fn(n): return float(n) if re.match(r'^[0-9\.]+$', n) else n
         cols = list(map(fn, cols))
         csv.append(cols)
 
@@ -24,7 +25,7 @@ random.shuffle(csv)
 
 # 학습데이터와 테스트 데이터로 분리
 total_len = len(csv)
-train_len = int(total_len * 2/3)
+train_len = int(total_len * 2 / 3)
 train_data = []
 train_label = []
 test_data = []

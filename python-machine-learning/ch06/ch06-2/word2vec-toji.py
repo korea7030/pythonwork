@@ -5,7 +5,8 @@ from konlpy.tag import Twitter
 from gensim.models import word2vec
 
 # utf-16으로 인코딩 후 출력
-fp = codecs.open("C:\\pythonwork\\python-machine-learning\\ch06\\ch06-1\\2BEXXX09.txt", "r", encoding="utf-16")
+fp = codecs.open(
+    "C:\\pythonwork\\python-machine-learning\\ch06\\ch06-1\\2BEXXX09.txt", "r", encoding="utf-16")
 soup = BeautifulSoup(fp, "html.parser")
 body = soup.find('body')
 text = body.getText()

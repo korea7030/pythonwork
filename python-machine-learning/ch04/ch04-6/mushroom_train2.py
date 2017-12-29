@@ -9,7 +9,7 @@ mr = pd.read_csv("mushroom.csv", header=None)
 
 # 데이터 내부의 분류 변수 전개
 label = []
-data=[]
+data = []
 attr_list = []
 
 for row_index, row in mr.iterrows():
@@ -17,16 +17,16 @@ for row_index, row in mr.iterrows():
     exdata = []
     for col, v in enumerate(row.ix[1:]):
         if row_index == 0:
-            attr = {"dic" : {}, "cnt" : 0}
+            attr = {"dic": {}, "cnt": 0}
             attr_list.append(attr)
         else:
             attr = attr_list[col]
 
         # 버섯의 특징
-        d = [0,0,0,0,0,0,0,0,0,0,0,0]
+        d = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
         if v in attr["dic"]:
-            idx= attr["dic"][v]
+            idx = attr["dic"][v]
         else:
             idx = attr["cnt"]
             attr["dic"][v] = idx

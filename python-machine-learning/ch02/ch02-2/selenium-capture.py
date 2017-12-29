@@ -4,7 +4,8 @@ from selenium import webdriver
 url = "http://www.naver.com/"
 # phantomJS 드라이버 추출
 
-browser = webdriver.PhantomJS("C://phantomjs-2.1.1-windows//bin//phantomjs.exe") ## phantomjs 파일 경로 필요
+browser = webdriver.PhantomJS(
+    "C://phantomjs-2.1.1-windows//bin//phantomjs.exe")  # phantomjs 파일 경로 필요
 
 # 3초 대기
 browser.implicitly_wait(3)

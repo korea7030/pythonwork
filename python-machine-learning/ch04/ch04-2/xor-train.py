@@ -20,9 +20,9 @@ for row in xor_data:
     q = row[1]
     r = row[2]
 
-    ## 학습 데이터저장
-    data.append([p,q])
-    ## 정답 레이블 저장
+    # 학습 데이터저장
+    data.append([p, q])
+    # 정답 레이블 저장
     label.append(r)
 
 # 데이터 학습
@@ -34,10 +34,12 @@ pre = clf.predict(data)
 print("예측 결과 :", pre)
 
 # 결과 확인
-ok = 0; total=0
+ok = 0
+total = 0
 for idx, answer in enumerate(label):
     p = pre[idx]
-    if p == answer: ok+=1
-    total+=1
+    if p == answer:
+        ok += 1
+    total += 1
 
-print("정답률 : ", ok, "/ ", total, "=", ok/total)
+print("정답률 : ", ok, "/ ", total, "=", ok / total)

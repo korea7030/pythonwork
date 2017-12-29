@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import urllib.request as req
-import os.path, random
+import os.path
+import random
 import json
 
-#JSON 데이터 내려 받기
+# JSON 데이터 내려 받기
 url = 'http://api.github.com/repositories'
 savename = "repo.json"
 if not os.path.exists(url):

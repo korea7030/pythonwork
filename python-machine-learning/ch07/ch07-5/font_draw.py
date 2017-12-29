@@ -1,18 +1,22 @@
 # -*- coding: utf-8 -*-
-import os, glob
+import os
+import glob
 from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-import cv2, random
+import cv2
+import random
 
 # 크기 지정
 image_size = 28
 
 # 폰트 설정
-ttf_list = glob.glob("C:/Windows/Fonts/*.ttf") #
+ttf_list = glob.glob("C:/Windows/Fonts/*.ttf")
 
 print("font count = ", len(ttf_list))
 
 # 중앙에 문자 그리기
+
+
 def draw_text(im, font, text):
     dr = ImageDraw.Draw(im)
     im_sz = np.array(im.size)
@@ -20,10 +24,14 @@ def draw_text(im, font, text):
     xy = (im_sz - fo_sz) / 2
     dr.text(xy, text, font=font, fill=(255))
 
+
 # 샘플 이미지를 출력할 폴더
-if not os.path.exists("./image/num"): os.makedirs("./image/num")
+if not os.path.exists("./image/num"):
+    os.makedirs("./image/num")
 
 # 회전하거나 확대에서 데이터 늘리기
+
+
 def gen_image(base_im, no, font_name):
     for ang in range(-20, 20, 2):
         sub_im = base_im.rotate(ang)
@@ -34,22 +42,22 @@ def gen_image(base_im, no, font_name):
 
         w = image_size
         # 조금씩 확대
-        for r in range(8,15,3):
-            size = round((r/10) * image_size)
+        for r in range(8, 15, 3):
+            size = round((r / 10) * image_size)
             im2 = cv2.resize(data, (size, size), cv2.INTER_AREA)
             data2 = np.asarray(im2)
 
             if image_size > size:
                 x = (image_size - size) // 2
                 data = np.zeros((image_size, image_size))
-                data[x:x+size, x:x+size] - data2
+                data[x:x + size, x:x + size] - data2
             else:
-                x = (size-image_size) //2
-                data = data2[x:x+w, x:x+w]
+                x = (size - image_size) // 2
+                data = data2[x:x + w, x:x + w]
             X.append(data)
             Y.append(no)
 
-            if random.randint(0,400) == 0:
+            if random.randint(0, 400) == 0:
                 fname = "image/num/n-{0}-{1}-{2}.PNG".format(font_name, no, ang, r)
                 cv2.imwrite(fname, data)
 
@@ -69,19 +77,20 @@ for path in ttf_list:
 
         # 폰트 랜더링 범위 추출
         ima = np.asarray(im)
-        blur = cv2.GaussianBlur(ima, (5,5), 0) # 블러
-        th = cv2.adaptiveThreshold(blur, 255 , 1, 1, 11, 2) # 2진 변환
+        blur = cv2.GaussianBlur(ima, (5, 5), 0)  # 블러
+        th = cv2.adaptiveThreshold(blur, 255, 1, 1, 11, 2)  # 2진 변환
         contours = cv2.findContours(th, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)[1]
 
         for cnt in contours:
-            x,y,w,h = cv2.boundingRect(cnt)
-            if w < 10 or h < 10: continue
-            num = ima[y:y+h, x:x+w] # 부분 이미지 추출
+            x, y, w, h = cv2.boundingRect(cnt)
+            if w < 10 or h < 10:
+                continue
+            num = ima[y:y + h, x:x + w]  # 부분 이미지 추출
             ww = w if w > h else h
-            wx = (ww-w) //2
-            wy = (ww-h) // 2
-            spc = np.zeros((ww,ww))
-            spc[wy:wy+h, wx:wx+w] = num
+            wx = (ww - w) // 2
+            wy = (ww - h) // 2
+            spc = np.zeros((ww, ww))
+            spc[wy:wy + h, wx:wx + w] = num
             num = cv2.resize(spc, (image_size, image_size), cv2.INTER_AREA)
 
             # 표준 상태를 데이터에 추가

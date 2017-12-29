@@ -33,4 +33,4 @@ products = browser.find_elements_by_css_selector(".p_info span")
 print(products)
 
 for product in products:
-    print("-",product.text)
+    print("-", product.text)

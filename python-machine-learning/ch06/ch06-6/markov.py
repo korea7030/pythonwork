@@ -4,17 +4,24 @@ from bs4 import BeautifulSoup
 from konlpy.tag import Twitter
 import urllib.request
 
-import os,re, json, random
+import os
+import re
+import json
+import random
 
 # 마르코프 체인 딕셔너리 만들기
+
+
 def make_dic(words):
     tmp = ["@"]
     dic = {}
 
     for word in words:
         tmp.append(word)
-        if len(tmp) < 3: continue
-        if len(tmp) > 3: tmp = tmp[1:]
+        if len(tmp) < 3:
+            continue
+        if len(tmp) > 3:
+            tmp = tmp[1:]
 
         set_word3(dic, tmp)
 
@@ -24,17 +31,25 @@ def make_dic(words):
     return dic
 
 # 딕셔너리에 데이터 등록
+
+
 def set_word3(dic, s3):
-    w1,w2,w3 = s3
-    if not w1 in dic: dic[w1] = {}
-    if not w2 in dic[w1]: dic[w1][w2] = {}
-    if not w3 in dic[w1][w2] : dic[w1][w2][w3] = 0
+    w1, w2, w3 = s3
+    if not w1 in dic:
+        dic[w1] = {}
+    if not w2 in dic[w1]:
+        dic[w1][w2] = {}
+    if not w3 in dic[w1][w2]:
+        dic[w1][w2][w3] = 0
     dic[w1][w2][w3] += 1
 
 # 문장 만들기
+
+
 def make_sentence(dic):
     ret = []
-    if not "@" in dic: return "no dic"
+    if not "@" in dic:
+        return "no dic"
     top = dic["@"]
     w1 = word_choice(top)
     w2 = word_choice(top[w1])
@@ -44,18 +59,20 @@ def make_sentence(dic):
     while True:
         w3 = word_choice(dic[w1][w2])
         ret.append(w3)
-        if w3 == ".": break
-        w1,w2 = w2,w3
+        if w3 == ".":
+            break
+        w1, w2 = w2, w3
     ret = "".join(ret)
 
     # 띄어쓰기
     params = urllib.parse.urlencode({
-        "_callback" : "",
-        "q" : ret
+        "_callback": "",
+        "q": ret
     })
 
     # 네이버 맞춤법 검사기 사용
-    data = urllib.request.urlopen("https://m.search.naver.com/p/csearch/dcontent/spellchecker.nhn?"+params)
+    data = urllib.request.urlopen(
+        "https://m.search.naver.com/p/csearch/dcontent/spellchecker.nhn?" + params)
 
     data = data.read().decode("utf-8")[1:-2]
     data = json.loads(data)
@@ -70,6 +87,7 @@ def word_choice(sel):
     keys = sel.keys()
     return random.choice(list(keys))
 
+
 # 문장 읽어 들이기
 toji_file = "toji.txt"
 dict_file = "markov-toji.json"
@@ -80,7 +98,7 @@ if not os.path.exists(dict_file):
     soup = BeautifulSoup(fp, "html.parser")
     body = soup.select_one("body")
     text = body.getText()
-    text = text.replace("…", "") # 구두점 문제 해결
+    text = text.replace("…", "")  # 구두점 문제 해결
 
     # 형태소 분석
     twitter = Twitter()
