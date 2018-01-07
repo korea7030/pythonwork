@@ -10,7 +10,7 @@ urlpatterns = patterns('',
                        url(r'^logout/$', views.signout, name='logout'),  # 로그인
                        url(r'^get_book/$', views.get_book, name='get_book'),  # 상세정보
                        url(r'^update/$', views.book_update, name='book_update'),  # 상세정보_수정
-                       url(r'^dash/$', views.book_dash, name='book_dash'),  # 상세정보_수정
+                       url(r'^save/$', views.book_save, name='book_save'),  # 상세정보_수정
                        url(r'^analytic_word/$', views.analytic_word, name='analytic_word'),  # 사용단어 분석
                        url(r'^ajax_analytic_word/$', views.ajax_analytic_word,
                            name='ajax_analytic_word')  # ajax 분석

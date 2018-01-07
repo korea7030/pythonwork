@@ -100,7 +100,7 @@ class BookInfo(models.Model):
     book_format = models.CharField(max_length=20, blank=True, null=True)
     pages = models.IntegerField(blank=True, null=True)
     rating = models.IntegerField(blank=True, null=True)
-    cate_cd = models.ForeignKey(BookCategory, db_column='cate_cd', blank=True, null=True)
+    cate_cd = models.ForeignKey(BookCategory, db_column='cate_id', blank=True, null=True)
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     reg_date = models.DateTimeField(blank=True, null=True, auto_now_add=True)
@@ -111,7 +111,7 @@ class BookInfo(models.Model):
     book_essay = models.CharField(max_length=4000, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'book_info'
 
 
@@ -137,7 +137,7 @@ class BookSaveInfo(models.Model):
     book_essay = models.CharField(max_length=4000, blank=True, null=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'book_info'
 
 

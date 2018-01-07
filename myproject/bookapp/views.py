@@ -38,7 +38,7 @@ import matplotlib.font_manager
 import networkx
 import operator
 
-from konlpy.tag import Twitter  # 시간이 가장 빠름(windows 기준)
+from konlpy.tag import Twitter, Mecab # 시간이 가장 빠름(windows 기준)
 from sklearn.feature_extraction.text import CountVectorizer
 
 SWITCH_MAP = {
@@ -50,38 +50,38 @@ SWITCH_MAP = {
 
 
 def index(request):
-    if request.method == 'POST':
-        form = BookInfoAddForm(request.POST)
-        response_data = {}
+    format_keys = ['key', 'values']
+    format_tmp = {key: None for key in format_keys}
+    yearmonth_tmp = {key: None for key in format_keys}
 
-        cate_id = ''
-        if form.is_valid():
+    # 책 종류별 Count
+    book_group_category = BookInfo.objects.all().select_related('cate_cd').values(
+        'cate_cd__cate_2').annotate(total=Count('cate_cd__cate_2')).order_by('-total')
 
-            book_format = form.cleaned_data['book_format']
-            print(request.POST.get('category'))
+    # 책 format별 Count
+    book_group_format = BookInfo.objects.all().values(
+        'book_format').annotate(total=Count('book_format')).order_by('-total')
+    format_tmp['key'] = 'format_group'
+    format_tmp['values'] = book_group_format
 
-            if book_format == 'eBook':
-                cate_id = BookCategory.objects.filter(Q(cate_1='e북') & Q(
-                    cate_2=request.POST.get('category'))).values()
-            else:
-                cate_id = BookCategory.objects.filter(~Q(cate_1='e북') & Q(
-                    cate_2=request.POST.get('category'))).values()
+    extract_query = "to_char(start_date, 'YYYY-MM')"
+    yearmonth_count = list(BookInfo.objects.all().extra(select={'read_year_month': extract_query}).values(
+        'read_year_month').annotate(count_items=Count('start_date')).order_by('read_year_month'))
 
-            print(cate_id)
-            new_book = form.save(commit=False)
-            new_book.reg_date = datetime.datetime.now()
-            new_book.cate_cd = cate_id[0]['cate_id']
-            # print(new_book.cate_cd)
-            new_book.save()
-            response_data['result'] = "저장 완료"
-            response_data['book_sequence'] = form.cleaned_data['book_sequence']
+    # print(dir(yearmonth_count))
+    print(yearmonth_count[0])
+    yearmonth_tmp['key'] = 'yearmonth_group'
+    yearmonth_tmp['values'] = yearmonth_count
 
-            return HttpResponse(json.dumps(response_data), content_type="application/json")
-    else:
-        form = BookInfoAddForm()
+    # rating별 count
+    # book_group_rating = BookInfo.objects.all().values('rating').annotate(total=Count('rating')).order_by('-total')
 
-    return render(request, 'bookapp/index.html', {'form': form, 'title': 'Books Store Page'})
+    # book_group_borrowed = BookInfo.objects.all().values('borrowed_yn').annotate(total=Count('borrowed_yn')).order_by('-total')
 
+    books = BookInfo.objects.order_by(
+        '-start_date').values('book_title', 'poster_url').select_related("cate_cd")[0:5]
+    # print(books)
+    return render(request, 'bookapp/book_dash.html', {'book_group_category': list(book_group_category),  'book_group_format': format_tmp, 'yearmonth_count': yearmonth_tmp,  'books': books, 'title': 'Book DASHBOARD'})
 
 def search(request):
     ''' daum api를 활용하여 책 정보 조회'''
@@ -230,40 +230,38 @@ def book_update(request):
         pass
 
 
-def book_dash(request):
+def book_save(request):
+    if request.method == 'POST':
+        form = BookInfoAddForm(request.POST)
+        response_data = {}
 
-    format_keys = ['key', 'values']
-    format_tmp = {key: None for key in format_keys}
-    yearmonth_tmp = {key: None for key in format_keys}
+        cate_id = ''
+        if form.is_valid():
 
-    # 책 종류별 Count
-    book_group_category = BookInfo.objects.all().select_related('cate_cd').values(
-        'cate_cd__cate_2').annotate(total=Count('cate_cd__cate_2')).order_by('-total')
+            book_format = form.cleaned_data['book_format']
+            print(request.POST.get('category'))
 
-    # 책 format별 Count
-    book_group_format = BookInfo.objects.all().values(
-        'book_format').annotate(total=Count('book_format')).order_by('-total')
-    format_tmp['key'] = 'format_group'
-    format_tmp['values'] = book_group_format
+            if book_format == 'eBook':
+                cate_id = BookCategory.objects.filter(Q(cate_1='e북') & Q(
+                    cate_2=request.POST.get('category'))).values()
+            else:
+                cate_id = BookCategory.objects.filter(~Q(cate_1='e북') & Q(
+                    cate_2=request.POST.get('category'))).values()
 
-    extract_query = "to_char(start_date, 'YYYY-MM')"
-    yearmonth_count = list(BookInfo.objects.all().extra(select={'read_year_month': extract_query}).values(
-        'read_year_month').annotate(count_items=Count('start_date')).order_by('read_year_month'))
+            print(cate_id)
+            new_book = form.save(commit=False)
+            new_book.reg_date = datetime.datetime.now()
+            new_book.cate_cd = cate_id[0]['cate_id']
+            # print(new_book.cate_cd)
+            new_book.save()
+            response_data['result'] = "저장 완료"
+            response_data['book_sequence'] = form.cleaned_data['book_sequence']
 
-    # print(dir(yearmonth_count))
-    print(yearmonth_count[0])
-    yearmonth_tmp['key'] = 'yearmonth_group'
-    yearmonth_tmp['values'] = yearmonth_count
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
+    else:
+        form = BookInfoAddForm()
 
-    # rating별 count
-    # book_group_rating = BookInfo.objects.all().values('rating').annotate(total=Count('rating')).order_by('-total')
-
-    # book_group_borrowed = BookInfo.objects.all().values('borrowed_yn').annotate(total=Count('borrowed_yn')).order_by('-total')
-
-    books = BookInfo.objects.order_by(
-        '-start_date').values('book_title', 'poster_url').select_related("cate_cd")[0:5]
-    # print(books)
-    return render(request, 'bookapp/book_dash.html', {'book_group_category': list(book_group_category),  'book_group_format': format_tmp, 'yearmonth_count': yearmonth_tmp,  'books': books, 'title': 'Book DASHBOARD'})
+    return render(request, 'bookapp/index.html', {'form': form, 'title': 'Books Store Page'})
 
 
 def ajax_analytic_word(request):
@@ -384,6 +382,7 @@ def get_word(doc):
         jpype.attachThreadToJVM()  # jpype 문제 해결을 위한 코드
 
     tagger = Twitter()
+    # tagger = Mecab()
     nouns = tagger.nouns(doc)
     # print("tagger nouns time %s seconds" %(time.time() - get_word_time))
     remove_noun = []

@@ -27,7 +27,7 @@ DAUM_API_KEY = '917124f7f8dd51950bdfa5bbcbf98219'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['13.124.222.125',]
 
 
 # Application definition
@@ -91,14 +91,13 @@ AUTHENTICATION_BACKENDS = (
 )
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'db_book',
         'USER': 'postgres',
-        'PASSWORD': '1234',
-        'HOST': 'localhost',
+        'PASSWORD': '12345678',
+        'HOST': 'mybookdb.czypjmusens3.ap-northeast-2.rds.amazonaws.com',
         'PORT': '5432',
     }
 }
