@@ -19,6 +19,7 @@
 - **python-machine-learning** : 파이썬을 이용한 머신러닝, 딥러닝 실전개발 입문 관련 코드
 - **RL_python** : 강화학습 관련 코드(Sungkim 교수 강의)
 - **socialNetWorklecture** : 소셜네트워크분석 강의내용
+- **regular_Expression** : 정규표현식 코드
 - **tensorflow** : 텐서플로우 관련 코드(tensorflow 첫걸음)
 - **titanic** : 타이타닉 데이터 분석(디비가이드넷 연재)
 - **truedelta** : truedelta 사이트 crawling 코드
