@@ -13,7 +13,7 @@ from django.template import RequestContext
 from django.core import serializers
 
 from django.views import generic
-from django.views.generic import FormView
+from django.views.generic import FormView, ListView
 
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -49,39 +49,38 @@ SWITCH_MAP = {
 }
 
 
-def index(request):
-    format_keys = ['key', 'values']
-    format_tmp = {key: None for key in format_keys}
-    yearmonth_tmp = {key: None for key in format_keys}
+class IndexView(ListView):
+    """
+     main page
+     class based view 변환
+    """
+    model = BookInfo
+    template_name = 'bookapp/book_dash.html'
 
-    # 책 종류별 Count
-    book_group_category = BookInfo.objects.all().select_related('cate_cd').values(
-        'cate_cd__cate_2').annotate(total=Count('cate_cd__cate_2')).order_by('-total')
+    def get_context_data(self, **kwargs):
+        format_keys = ['key', 'values']
+        format_tmp = {key: None for key in format_keys}
+        yearmonth_tmp = {key: None for key in format_keys}
+        extract_query = "to_char(start_date, 'YYYY-MM')"
 
-    # 책 format별 Count
-    book_group_format = BookInfo.objects.all().values(
-        'book_format').annotate(total=Count('book_format')).order_by('-total')
-    format_tmp['key'] = 'format_group'
-    format_tmp['values'] = book_group_format
+        context = super(IndexView, self).get_context_data(**kwargs)
+        # 책 카테고리 별 Counting Query
+        context['book_group_category'] = list(BookInfo.objects.all().values('cate_cd__cate_2').annotate(total=Count('cate_cd__cate_2')).order_by('-total'))
+        # 책 형태별 Counting Query
+        book_group_format = BookInfo.objects.all().values('book_format').annotate(total=Count('book_format')).order_by('-total')
+        format_tmp['key'] = 'format_group'
+        format_tmp['values'] = list(book_group_format)
+        context['book_group_format'] = format_tmp
+        # 연월별 권수 Counting Query
+        yearmonth_count = list(BookInfo.objects.all().extra(select={'read_year_month': extract_query}).values('read_year_month').annotate(count_items=Count('start_date')).order_by('read_year_month'))
+        yearmonth_tmp['key'] = 'yearmonth_group'
+        yearmonth_tmp['values'] = yearmonth_count
+        context['yearmonth_count'] = yearmonth_tmp
 
-    extract_query = "to_char(start_date, 'YYYY-MM')"
-    yearmonth_count = list(BookInfo.objects.all().extra(select={'read_year_month': extract_query}).values(
-        'read_year_month').annotate(count_items=Count('start_date')).order_by('read_year_month'))
+        # 최근에 읽은 책 5권 Query
+        context['books'] = BookInfo.objects.order_by('-start_date').values('book_title', 'poster_url')[0:5]
 
-    # print(dir(yearmonth_count))
-    print(yearmonth_count[0])
-    yearmonth_tmp['key'] = 'yearmonth_group'
-    yearmonth_tmp['values'] = yearmonth_count
-
-    # rating별 count
-    # book_group_rating = BookInfo.objects.all().values('rating').annotate(total=Count('rating')).order_by('-total')
-
-    # book_group_borrowed = BookInfo.objects.all().values('borrowed_yn').annotate(total=Count('borrowed_yn')).order_by('-total')
-
-    books = BookInfo.objects.order_by(
-        '-start_date').values('book_title', 'poster_url').select_related("cate_cd")[0:5]
-    # print(books)
-    return render(request, 'bookapp/book_dash.html', {'book_group_category': list(book_group_category),  'book_group_format': format_tmp, 'yearmonth_count': yearmonth_tmp,  'books': books, 'title': 'Book DASHBOARD'})
+        return context
 
 def search(request):
     ''' daum api를 활용하여 책 정보 조회'''

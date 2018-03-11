@@ -27,7 +27,7 @@ DAUM_API_KEY = '917124f7f8dd51950bdfa5bbcbf98219'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['13.124.222.125',]
+ALLOWED_HOSTS = ['13.124.222.125','localhost', '127.0.0.1']
 
 
 # Application definition

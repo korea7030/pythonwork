@@ -120,7 +120,7 @@
         //.staggerLabels(historicalBarChart[0].values.length > 8)
         .showValues(true)
         .duration(250)
-        .yDomain([0,100]);
+        .yDomain([0,500]);
 
     chart.yAxis.tickFormat(function(d) { return d3.format('d')(d) + '권'; });
     d3.select('#test2')

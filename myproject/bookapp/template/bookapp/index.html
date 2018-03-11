@@ -355,7 +355,7 @@ $('#book_search').click(function(){
 		var formData = $('#info_form').serialize();
 		// alert($('#category_nm').val());
 		$.ajax({
-			url : '/bookapp/',
+			url : "{% url 'book_save' %}",
 			type: 'POST',
 			data : formData,
 			success : function(json) {

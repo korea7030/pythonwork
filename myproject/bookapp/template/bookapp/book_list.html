@@ -120,6 +120,9 @@
 	{% endif %}
 </div>
 
+{% block right_panel %}
+asdfsdf
+{% endblock %}
 <form id="bookForm" method="post" action="/book/update/" class="form-horizontal" style="display: none;">
 	{% csrf_token %}
 	<input type="hidden" class="form-control" name="book_sequence" id="book_sequence" />
@@ -208,11 +211,11 @@
         input_data['id' ] = id.trim();
 
         $.ajax({
-            url: '/bookapp/get_book/',
-            type : 'get',
+            url: "{% url 'bookapp:get_book' %}",
+            type : "get",
             // dataType: 'json',
             data : input_data,
-            method: 'GET',
+            method: "GET",
 
             success : function(data) {
             	/*
@@ -237,7 +240,7 @@
 	            // Show the dialog
 	            bootbox
 	                .dialog({
-	                    title: 'Edit the user profile',
+	                    title: book_data[0]['fields']['book_title'].trim(),
 	                    message: $('#bookForm'),
 	                    show: false // We will show it manually later
 	                })
@@ -261,14 +264,14 @@
     	$('#bookForm').on('submit', function(e){
     		e.preventDefault();
     		$.ajax({
-    			url : "/bookapp/update/",
+    			url : "{% url 'bookapp:book_update' %}",
     			type : "POST",
     			data : $('#bookForm').serialize(),
     			success: function(data) {
     				if (data == 'success') {
     					bootbox.hideAll();
     					alert("update 완료");
-    					window.location = '/bookapp/book_list/';
+    					window.location = 'bookapp:book_list';
     				} else {
     					alert("error 발생");
     				}
