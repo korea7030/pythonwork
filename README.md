@@ -19,6 +19,7 @@
 - **myproject** : 개인 웹 분석 프로젝트
 - **NaverImageAPI** : Naver Image API를 활용한 image 크롤링
 - **pandas** : 파이썬 라이브러리를 활용한 데이터 분석 pandas 코드
+- **parsing_example** : XML vs JSON 속도비교 관련 코드
 - **photowall** : nomade askdjango photowall
 - **python-machine-learning** : 파이썬을 이용한 머신러닝, 딥러닝 실전개발 입문 관련 코드
 - **PythonLec** : 파이썬프로그래밍 코드(대학원)
