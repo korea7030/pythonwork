@@ -1,0 +1,44 @@
+{% extends "shop/layout.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="col-md-8 offset-md-2 mt-3">
+        <form  action="" method="post" id="pay-form">
+            {% csrf_token %}
+            <div class="card card-default">
+                <div class="card-header">
+                    결제 진행 중....
+                </div>
+                <div class="card-body">
+                    {{ form }}
+                    {{ form.as_import}}
+                </div>
+            </div>
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}
+
+{% block extra-body %}
+<script id="iamport-script">
+$(function() {
+    var params = {{json_fields}};
+    console.log(params);
+    IMP.init("{{ iamport_shop_id }}");
+    IMP.request_pay(params, function(response_data) {
+        if ( ! response_data.success) {
+            alert(response_data.error_msg + "(" + response_data.error_code +")");
+        }
+        var $form = $("#iamport-script").closest("form");
+
+        $.each(response_data, function(key, value) {
+            $form.find("input[name=" +key+ "]").val(value);
+        });
+        $form.submit();
+    });
+});
+</script>
+
+{% endblock %}

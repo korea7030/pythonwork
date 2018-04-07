@@ -1,0 +1,36 @@
+{% extends "shop/layout.html" %}
+{% load humanize %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>총액</th>
+                        <td colspan="2">{{form.instance.amount|intcomma}}</td>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for item_order in item_order_list %}
+                    <tr>
+                        <td>{{item_order.item.name}}</td>
+                        <td>{{item_order.quantity|intcomma}}</td>
+                        <td>{{item_order.amount|intcomma}}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <form action="" method="post">
+                {% csrf_token %}
+                <table>
+                    {{form.as_table}}
+                </table>
+                <input type="submit" class="btn btn-primary" value="결제하기">
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

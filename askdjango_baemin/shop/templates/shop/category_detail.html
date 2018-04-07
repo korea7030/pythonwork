@@ -1,0 +1,40 @@
+{% extends 'shop/layout.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h2>{{category.name}}</h2>
+        <div class="row">
+            {% for shop in category.shop_set.all %}
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                    {% if shop.photo %}
+                    <img src="{{shop.photo.url}}" />
+                    {# <a href="{{shop.get_absolute_url}}"></a> #}
+                    {% endif %}
+                    <div class="card-body">
+                        <p class="card-text">{{shop.name}}</p>
+                        <p class="card-text">
+                            {{shop.desc}}
+                            {{shop.address}}
+                            {# {{shop.latlng}} #}
+                            {# {{shop.is_public}} #}
+                        </p>
+
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="{{shop.get_absolute_url}}" class="btn btn-sm btn-outline-secondary">View</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <hr/>
+    <a href="{% url 'shop:index' %}" class='btn btn-primary'>대문</a>
+</div>
+
+
+
+{% endblock %}
