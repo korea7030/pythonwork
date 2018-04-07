@@ -77,6 +77,7 @@ coverage.xml
 # Translations
 *.mo
 *.pot
+*.po
 
 # Django stuff:
 *.log
@@ -90,3 +91,18 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 >>>>>>> 9dcd5f273d18bbc65d3c8064491a259ad37662b4
+
+# sqlite3
+db.sqlite3
+
+.floo
+.flooignore
+.spyderworkspace
+*.png
+*.jpg
+*.bpm
+*.zip
+Untitled.ipynb
+요기요 크롤링(가게,메뉴).ipynb
+요기요크롤링.ipynb
+*.json
