@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 *.py[co]
 
 # Packages
@@ -26,7 +25,7 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
-=======
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -90,7 +89,6 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
->>>>>>> 9dcd5f273d18bbc65d3c8064491a259ad37662b4
 
 # sqlite3
 db.sqlite3
@@ -107,3 +105,18 @@ Untitled.ipynb
 요기요크롤링.ipynb
 *.json
 test.xml
+*.csv
+*.xlsx
+*.xls
+*.sbn
+*.sbx
+*.prj
+*.dbf
+*.xml
+*.xsd
+*.txt
+*.pdf
+*.npz
+*.data
+*.model
+chromedriver

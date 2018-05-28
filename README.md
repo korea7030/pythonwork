@@ -21,6 +21,7 @@
 - **pandas** : 파이썬 라이브러리를 활용한 데이터 분석 pandas 코드
 - **parsing_example** : XML vs JSON 속도비교 관련 코드
 - **photowall** : nomade askdjango photowall
+- **pydata-handling** : python 데이터 주므르기 관련
 - **python-machine-learning** : 파이썬을 이용한 머신러닝, 딥러닝 실전개발 입문 관련 코드
 - **PythonLec** : 파이썬프로그래밍 코드(대학원)
 - **regular_Expression** : 정규식 관련 정리
