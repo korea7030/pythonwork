@@ -120,3 +120,5 @@ test.xml
 *.data
 *.model
 chromedriver
+*.mat
+*.tgz
