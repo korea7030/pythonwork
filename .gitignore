@@ -122,3 +122,5 @@ test.xml
 chromedriver
 *.mat
 *.tgz
+HandsOnML/datasets/*
+.idea/*
