@@ -26,6 +26,7 @@ def quick_sort(arr):
         print("based pivot right value : " + str(right))
 
         mid.append(pivot)
+        print("middle value : " + str(mid))
 
         return quick_sort(left) + mid + quick_sort(right)
     else:
