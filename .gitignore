@@ -123,4 +123,6 @@ chromedriver
 *.mat
 *.tgz
 HandsOnML/datasets/*
+*/.idea/diff_match.iml
+*/venv/*
 .idea/*
