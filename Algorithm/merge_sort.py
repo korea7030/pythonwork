@@ -27,12 +27,16 @@ def merge(left, right):
 def merge_sort(list):
     if len(list) <= 1:
         return list
+
+    # 데이터를 절반으로 나눔
     mid = len(list) // 2
-    leftList = list[:mid]
-    rightList = list[mid:]
-    leftList = merge_sort(leftList)
-    rightList = merge_sort(rightList)
-    return merge(leftList, rightList)
+    left_list = list[:mid]
+    right_list = list[mid:]
+    # 각각의 배열을 정렬
+    left_list = merge_sort(left_list)
+    right_list = merge_sort(right_list)
+    # 최종 정렬(merge)
+    return merge(left_list, right_list)
 
 
 if __name__ == '__main__':
