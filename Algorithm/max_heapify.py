@@ -30,7 +30,6 @@ def heap_sort(arr):
     # 트리의 절반부터 거꾸로 올라가며 heapify하는 것이 효율적
     # 이진트리의 성질에 의해 모든 요소값을 서로 한번씩 비교할 수 있음 : O(n)
     for i in range(n // 2 - 1, -1, -1):
-        print(i)
         heapify(arr, i, n)
 
     print('initialize heap : ' + str(arr))
@@ -43,6 +42,55 @@ def heap_sort(arr):
     return arr
 
 
+"""
+parent index return
+"""
+
+
+def parent(index):
+    return index // 2
+
+
+"""
+max_heap insert
+"""
+
+
+def max_heap_insert(arr, node):
+    arr.append(node)
+    heap_size = len(arr) - 1
+    i = heap_size
+
+    while i > 1:
+        p = parent(i)
+        if arr[i] < arr[p]:
+            tmp = arr[i]
+            arr[i] = arr[p]
+            arr[p] = tmp
+            i = p
+        else:
+            break
+
+    heap_sort(arr)
+
+    return arr
+
+
+def extract_max(arr, heap_size):
+    if heap_size < 1:
+        return
+
+    for i in range(len(arr) // 2 - 1, -1, -1):
+        heapify(arr, i, len(arr))
+
+    max = arr.pop(0)
+    arr[0] = arr[heap_size]
+
+    return max
+
+
 if __name__ == '__main__':
     data = [61, 324, 21, 56, 243, 6, 1, 634, 43, 3, 52]
     print(heap_sort(data))
+    print(extract_max(data, 4))
+    # print(max_heap_insert(data, 555))
