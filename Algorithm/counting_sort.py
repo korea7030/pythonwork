@@ -5,7 +5,6 @@ def counting_sorted(arr, K):
 
     # 입력된 arr의 각 요소들을 세아려 c에 기록
     for i in arr:
-        print("i : "+str(i))
         c[i] += 1
 
     print('c array : '+str(c))
@@ -16,6 +15,8 @@ def counting_sorted(arr, K):
     print('cumsum c array : '+str(c))
     # c값을 기준으로 재배치
     for i in arr:
+        print('i : '+str(i))
+        print('c[i] : '+str(c[i]))
         sorted_arr[c[i]-1] = i
         c[i] -= 1
 
