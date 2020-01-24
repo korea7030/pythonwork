@@ -18,6 +18,7 @@ class ItemAdmin(admin.ModelAdmin):
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
     """ RoomAdmin Definition"""
+    # Form의 경계 지정
     fieldsets = (
         (
             "Basic Info",
@@ -42,6 +43,7 @@ class RoomAdmin(admin.ModelAdmin):
         ("Last Details", {"fields": ("host",)}),
     )
 
+    # 리스트에 나타낼 필드 목록
     list_display = (
         "name",
         "description",
@@ -60,20 +62,24 @@ class RoomAdmin(admin.ModelAdmin):
         "count_photos",
     )
 
+    # 정렬 컬럼 지정
     ordering = (
         "name",
         "price",
     )
 
+    # 리스트 필터 컬럼 지정
     list_filter = (
         'instant_book', 'host__gender',
         'city', 'country', 'room_type', 'amenities',
         'facilities', 'house_rules')
 
+    # 조회필드 지정(default : icontains)
     search_fields = ('=city', '^host')  # city startswith
 
     filter_horizontal = ('amenities', 'facilities', 'house_rules')
 
+    # custom function 지정
     def count_amenities(self, obj):
         return obj.amenities.count()
 
@@ -86,4 +92,3 @@ class PhotoAdmin(admin.ModelAdmin):
     """ PhotoAdmin Definition """
 
     pass
-
