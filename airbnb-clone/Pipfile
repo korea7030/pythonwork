@@ -11,6 +11,8 @@ black = "*"
 
 [packages]
 pillow = "*"
+django-countries = "*"
+django = "==2.2.5"
 
 [requires]
 python_version = "3.7"
