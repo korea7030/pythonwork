@@ -39,7 +39,7 @@ DJANGO_APPS = [
 ]
 
 THIRD_PARTY_APPS = [
-    'django_countries',
+    'django_countries', 'django_seed'
 ]
 
 PROJECT_APPS = [
@@ -128,5 +128,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-
 AUTH_USER_MODEL = 'users.User'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  # 업로드 경로 지정
+
+MEDIA_URL = '/media/'  # ROOT의 media 폴더 지정(무조건 MEDIA_ROOT와 같을 필요가 없다)
