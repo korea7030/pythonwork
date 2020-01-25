@@ -19,7 +19,9 @@ from django.contrib import admin
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # namespace -> core.urls에 app_name 이름과 같아야함
+    url(r'', include('core.urls', namespace='core')),
+    url(r'admin/', admin.site.urls),
 ]
 
 # 개발서버일때만
