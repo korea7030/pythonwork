@@ -21,3 +21,9 @@ class HomeView(ListView):
 class RoomDetail(DetailView):
     """ RoomDetail Definition"""
     model = models.Room
+
+
+def search(request):
+    city = request.GET.get('city')
+    print(city)
+    return render(request, 'rooms/search.html', context={'city': city})
