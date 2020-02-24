@@ -14,6 +14,7 @@ pillow = "*"
 django-countries = "*"
 django = "==2.2.5"
 django-seed = "*"
+django-contries = "*"
 
 [requires]
 python_version = "3.7"
