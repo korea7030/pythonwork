@@ -1,8 +1,9 @@
 from django.shortcuts import render
+from django.core.paginator import Paginator
 from django.http import Http404
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, View
 from django_countries import countries
-from . import models
+from . import models, forms
 
 
 class HomeView(ListView):
@@ -24,100 +25,74 @@ class RoomDetail(DetailView):
     model = models.Room
 
 
-def search(request):
-    city = request.GET.get('city', 'Anywhere')
-    room_types = models.RoomType.objects.all()
-    country = request.GET.get('country', 'KR')
-    room_type = int(request.GET.get('room_type', 0))
-    price = int(request.GET.get('price', 0))
-    guests = int(request.GET.get('guests', 0))
-    bedrooms = int(request.GET.get('bedrooms', 0))
-    beds = int(request.GET.get('beds', 0))
-    baths = int(request.GET.get('baths', 0))
-    instant = request.GET.get('instant', False)
-    super_host = request.GET.get('super_host', False)
+class SearchView(View):
+    def get(self, request):
+        country = request.GET.get('country')
 
-    # 여러건의 입력값을 받을 때 사용
-    s_amenities = request.GET.getlist('amenities')  
-    s_facilities = request.GET.getlist('facilities')
+        if country:
+            # 검색결과 유지
+            form = forms.SearchForm(request.GET)
+            
+            if form.is_valid():
+                city = form.cleaned_data.get('city')
+                country = form.cleaned_data.get('country')
+                room_type = form.cleaned_data.get('room_type')
+                price = form.cleaned_data.get('price')
+                guests = form.cleaned_data.get('guests')
+                bedrooms = form.cleaned_data.get('bedrooms')
+                beds = form.cleaned_data.get('beds')
+                baths = form.cleaned_data.get('baths')
+                instant_book = form.cleaned_data.get('instant_book')
+                superhost = form.cleaned_data.get('superhost')
+                amenities = form.cleaned_data.get('amenities')
+                facilities = form.cleaned_data.get('facilities')
+                
+                filter_args = {}
+                if city != "Anywhere":
+                    filter_args["city__startswith"] = city
+                
+                filter_args["country"] = country
 
-    # 변수를 나열해서 쓰는 것이 아닌, 사용되는 element에 따라 나눠서 변수 선언
-    # form에서 입력되는 값
-    form = {
-        'city': city,
-        's_country': country,
-        's_room_type': room_type,
-        'price': price,
-        'guests': guests,
-        'bedrooms': bedrooms,
-        'beds': beds,
-        'baths': baths,
-        's_amenities': s_amenities,
-        's_facilities': s_facilities,
-        'instant': instant,
-        'super_host': super_host
-    }
+                if room_type is not None:
+                    filter_args["room_type"] = room_type
 
-    amenities = models.Amenity.objects.all()
-    facilities = models.Facility.objects.all()
+                if price is not None:
+                    filter_args["price__lte"] = price
 
-    # selectbox에서 입력되는 값
-    choices = {
-        'countries': countries,
-        'room_types': room_types,
-        'amenities': amenities,
-        'facilities': facilities,
-    }
+                if guests is not None:
+                    filter_args["guests__gte"] = guests
 
-    # 초기 filter 값은 빈값으로 두고 입력값에 따라 조건 설정
-    filter_args = {}
+                if bedrooms is not None:
+                    filter_args["bedrooms__gte"] = bedrooms
 
-    if city != 'Anywhere':
-        filter_args['city__startswith'] = city
-    
-    filter_args['country'] = country
+                if beds is not None:
+                    filter_args["beds__gte"] = beds
 
-    if room_type != 0:
-        filter_args['room_type__pk'] = room_type
+                if baths is not None:
+                    filter_args["baths__gte"] = baths
 
-    if price != 0:
-        filter_args['price__lte'] = price
+                if instant_book is True:
+                    filter_args["instant_book"] = True
 
-    if guests != 0:
-        filter_args['guests__gte'] = guests
+                if superhost is True:
+                    filter_args["host__superhost"] = True
 
-    if bedrooms != 0:
-        filter_args['bedrooms__gte'] = bedrooms
+                for amenity in amenities:
+                    filter_args["amenities"] = amenity
 
-    if beds != 0:
-        filter_args['beds__gte'] = beds
+                for facility in facilities:
+                    filter_args["facilities"] = facility
+                    
+                qs = models.Room.objects.filter(**filter_args).order_by("-created")
+                paginator = Paginator(qs, 10, orphans=5)
 
-    if baths != 0:
-        filter_args['baths__gte'] = baths
-    
-    # instant, super_host의 경우 on, False 형태로 값이 들어옴
-    # 이를 True 체크하기 위해선 bool 사용
-    if bool(instant) is True:
-        filter_args['instant_book'] = True
+                page = request.GET.get('page' or 1)
+                rooms = paginator.get_page(page)
 
-    if bool(super_host) is True:
-        filter_args['host__superhost'] = True
+                return render(
+                    request, 'rooms/search.html', {'form': form, 'rooms': rooms}
+                )
+        else:
+            form = forms.SearchForm()
 
-    if len(s_amenities) > 0:
-        for a_id in s_amenities:
-            filter_args['amenities__pk'] = int(a_id)
-    
-    if len(s_facilities) > 0:
-        for f_id in s_facilities:
-            filter_args['facilities__pk'] = int(f_id)
-    
-    # 최종 filter값 Queryset에 설정
-    rooms = models.Room.objects.filter(**filter_args)
-    
-    return render(
-        request,
-        'rooms/search.html',
-        # **를 붙이면 변수들을 나열하는 것과 같은 기능을 한다.
-        {**form, **choices, 'rooms': rooms},
-    )
-
+        return render(request, 'rooms/search.html', {'form': form})
