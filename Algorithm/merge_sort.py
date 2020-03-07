@@ -1,7 +1,7 @@
 '''
 merge sort
  - 시간복잡도
- best : O(nlog(n)), worst : O(nlog(n)log(n))
+ best : O(nlog(n)), worst : O(nlog(n))
 '''
 
 
