@@ -22,8 +22,8 @@ def fibonacci2(n):
     return fibonacci2(n-1) + fibonacci2(n-2)
 
 
-res = fibonacci(40)
+res = fibonacci(20)
 print(res)
 
-# res2 = fibonacci2(40)
-# print(res2)
+res2 = fibonacci2(20)
+print(res2)

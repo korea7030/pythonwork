@@ -1,4 +1,6 @@
 def counting_sorted(arr, K):
+    if K <= max(arr):
+        return
     # 각 요소가 몇개씩 들어가는지를 담을 c배열을 k 크기로 초기화
     c = [0] * K
     sorted_arr = [0] * len(arr)

@@ -37,10 +37,10 @@ def binary_search_v2(target, start, end, data):
             return mid
         elif data[mid] <= target:
             start = mid + 1
+            return binary_search_v2(target, start, end, data)
         else:
-            end = mid + 1
-
-    return binary_search_v2(target, start, end, data)
+            end = mid - 1
+            return binary_search_v2(target, start, end, data)
 
 
 if __name__ == '__main__':

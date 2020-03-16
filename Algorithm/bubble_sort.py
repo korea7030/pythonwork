@@ -8,7 +8,9 @@
 
 def bubble_sort(arr):
     for i in range(len(arr)):
-        for j in range(len(arr) - 1):
+        print('i : {}'.format(i))
+        for j in range(len(arr) - i-1):
+            print('j : {}'.format(j))
             if arr[j] > arr[j + 1]:
                 tmp = arr[j + 1]
                 arr[j + 1] = arr[j]

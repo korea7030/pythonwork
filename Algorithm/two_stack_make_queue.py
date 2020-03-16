@@ -21,28 +21,22 @@ class Stack:
 
 class MyQueue:
     def __init__(self):
-        self.st1 = Stack()
-        self.st2 = Stack()
+        self.st1 = list()
+        self.st2 = list()
 
     def enqueue(self, value):
-        self.st1.add(value)
+        self.st1.append(value)
 
     def dequeue(self):
-        if self.st2.is_empty():
-            while self.st1.is_empty() is False:
-                self.st2.add(self.st1.pop())
+        if len(self.st2) == 0:
+            while len(self.st1) > 0:
+                self.st2.append(self.st1.pop())
 
         return self.st2.pop()
 
 
-class test(unittest.TestCase):
-    def test(self):
-        mq = MyQueue()
-        mq.enqueue(1)
-        mq.enqueue(2)
+mq = MyQueue()
+mq.enqueue(1)
+mq.enqueue(2)
 
-        self.assertEqual(1, mq.dequeue())
-        mq.enqueue(3)
-        self.assertEqual(2, mq.dequeue())
-
-unittest.main()
+print(mq.dequeue())

@@ -7,6 +7,7 @@ merge sort
 
 def merge(left, right):
     result = []
+    print(left, right)
     while len(left) > 0 or len(right) > 0:
         if len(left) > 0 and len(right) > 0:  # left, right 둘다 있는 경우
             if left[0] <= right[0]:
@@ -30,6 +31,7 @@ def merge_sort(list):
 
     # 데이터를 절반으로 나눔
     mid = len(list) // 2
+    print('mid : {}'.format(mid))
     left_list = list[:mid]
     right_list = list[mid:]
     # 각각의 배열을 정렬

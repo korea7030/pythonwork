@@ -19,5 +19,5 @@ class HashMap:
 
 if __name__ == '__main__':
     hashmap = HashMap()
-    hashmap.save('aaa', 'bbb')
+    hashmap.save('aaa')
     print(hashmap.get('aaa'))

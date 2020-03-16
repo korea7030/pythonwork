@@ -26,11 +26,12 @@ def bfs(graph, start_node):
 
     while queue.qsize() > 0:
         node = queue.get()
-
+        print('pick node : ', node)
         if node not in visit:
             visit[node] = True
-
+            print('visit : ', visit)
             for next_node in graph[node]:
+                print('next : ', next_node)
                 queue.put(next_node)
 
     return visit
