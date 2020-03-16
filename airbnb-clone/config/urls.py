@@ -23,6 +23,7 @@ urlpatterns = [
     # namespace -> core.urls에 app_name 이름과 같아야함
     path('', include('core.urls', namespace='core')),
     path('rooms/', include('rooms.urls', namespace='rooms')),
+    path('users/', include('users.urls', namespace='users')),
     path('admin/', admin.site.urls),
 ]
 
