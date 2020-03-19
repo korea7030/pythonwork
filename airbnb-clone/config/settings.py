@@ -133,3 +133,13 @@ AUTH_USER_MODEL = 'users.User'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  # 업로드 경로 지정
 
 MEDIA_URL = '/media/'  # ROOT의 media 폴더 지정(무조건 MEDIA_ROOT와 같을 필요가 없다)
+
+
+# Email Configuration
+EMAIL_HOST = 'smtp.mailgun.org'
+EMAIL_PORT = '587'
+print(os.environ.get('MAILGUN_USERNAME'))
+EMAIL_HOST_USER = os.environ.get('MAILGUN_USERNAME')
+EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_PASSWORD')
+# mailgun 에서 제공하는 domain이어야 함
+EMAIL_FROM = 'leejh@sandboxe78cd30192984e48a6424376ba44e2d5.mailgun.org'
