@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from . import models
 
 
@@ -47,3 +48,10 @@ class SignUpForm(forms.ModelForm):
         user.username = email
         user.set_password(password)
         user.save()
+
+
+'''
+다음과 같이 UserCreationForm을 활용하면 간단하게 만들 수 있음
+class SignUpForm(UserCreationForm):
+    username = forms.EmailField(label='Email')
+'''
