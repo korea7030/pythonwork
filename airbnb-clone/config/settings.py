@@ -126,8 +126,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/static/'  # static server url 지정(디렉토리 경로가 아님)
 
+# static_url로 접근 시 접근할 수 있는 폴더지정위한 디렉토리 지정
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static')
+]
 AUTH_USER_MODEL = 'users.User'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')  # 업로드 경로 지정
