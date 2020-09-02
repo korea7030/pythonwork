@@ -106,6 +106,6 @@ if __name__ == "__main__":
     linked_list.printList()
 
     a = linked_list.get_last_n_node(3)
-    print(a)
+    # print(a)
 
-    print(linked_list.next())
+    # print(linked_list.next())

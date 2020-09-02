@@ -12,23 +12,25 @@
 def quick_sort(arr):
     if len(arr) > 1:
         # pivot 값 설정
-        pivot = arr[len(arr) - 1]
+        # pivot = arr[len(arr) // 2]
+        import math
+        pivot = arr[math.floor(len(arr)/2)]
         left, mid, right = [], [], []
 
         print("pivot value : " + str(pivot))
 
         # pivot값을 기준으로 작은값/큰값 나누기
-        for i in range(len(arr) - 1):
+        for i in range(len(arr)):
             if arr[i] < pivot:
                 left.append(arr[i])
-
-            elif arr[i] >= pivot:
+            elif arr[i] > pivot:
                 right.append(arr[i])
+            else:
+                mid.append(pivot)
 
         print("based pivot left value : " + str(left))
         print("based pivot right value : " + str(right))
 
-        mid.append(pivot)
         print("middle value : " + str(mid))
 
         # 반복진행
