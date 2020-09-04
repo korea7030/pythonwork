@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+무지의 먹랑 라이브(p. 316)
+"""
 from queue import PriorityQueue
 
 

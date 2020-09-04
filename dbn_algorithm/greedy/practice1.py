@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-큰 수의 법칙
+큰 수의 법칙(p. 92)
 """
 N, M, K = map(int, input().split())
 data = list(map(int, input().split()))
