@@ -12,7 +12,7 @@ Django==1.8.4
 django-crispy-forms==1.6.1
 django-datetime-widget==0.9.3
 django-rest-swagger==2.1.2
-djangorestframework==3.6.3
+djangorestframework==3.11.2
 entrypoints==0.2.3
 html5lib==1.0b10
 idna==2.5
